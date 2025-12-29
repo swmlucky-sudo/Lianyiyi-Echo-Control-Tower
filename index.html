@@ -1,50 +1,109 @@
-async function compile() {
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>Lianyiyi Echo v1.3.6 | Precision Gelyu Logic</title>
+    <style>
+        body { background-color: #010409; color: #c9d1d9; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
+        .main-grid { display: grid; grid-template-columns: 1fr 380px; gap: 20px; width: 1000px; margin-top: 20px; }
+        .tower-panel { background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 30px; position: relative; height: 480px; box-sizing: border-box; }
+        .visualizer { display: flex; justify-content: space-around; align-items: flex-end; height: 250px; border-bottom: 2px solid #30363d; margin-bottom: 20px; }
+        .voice-col { display: flex; flex-direction: column; align-items: center; width: 80px; }
+        .bar { width: 50px; height: 80px; transition: height 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67); border-radius: 4px 4px 0 0; }
+        #v-en { background: #58a6ff; box-shadow: 0 0 15px rgba(88, 166, 255, 0.4); }
+        #v-jp { background: #ff7b72; box-shadow: 0 0 15px rgba(255, 123, 114, 0.4); }
+        #v-cn { background: #7ee787; box-shadow: 0 0 15px rgba(126, 231, 135, 0.4); }
+        #v-tw { background: #d29922; box-shadow: 0 0 15px rgba(210, 153, 34, 0.4); }
+        .label { margin-top: 10px; font-size: 11px; color: #8b949e; font-family: monospace; }
+        .bar-val { font-size: 10px; margin-bottom: 5px; color: #8b949e; }
+        .log-panel { background: #000; border: 1px solid #30363d; border-radius: 12px; padding: 15px; font-size: 11px; height: 480px; overflow-y: auto; display: flex; flex-direction: column; box-sizing: border-box; }
+        .log-line { margin-bottom: 8px; line-height: 1.4; border-left: 3px solid #21262d; padding-left: 10px; }
+        .core { position: absolute; top: 20px; right: 20px; width: 60px; height: 60px; border: 1px solid #30363d; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+        .locked { border-color: #d29922; color: #d29922; box-shadow: 0 0 15px #d29922; font-weight: bold; }
+        .input-box { width: 1000px; margin-top: 20px; }
+        textarea { width: 100%; height: 80px; background: #161b22; border: 1px solid #30363d; border-radius: 8px; color: white; padding: 15px; font-size: 16px; box-sizing: border-box; outline: none; }
+        button { width: 100%; margin-top: 10px; padding: 15px; background: #58a6ff; color: #0d1117; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+    <h2 style="color:#58a6ff; letter-spacing: 2px;">LIANYIYI ECHO <span style="font-size:12px; color:#8b949e">// GELYU KERNEL v1.3.6</span></h2>
+
+    <div class="main-grid">
+        <div class="tower-panel">
+            <div class="core" id="core">440Hz</div>
+            <div class="visualizer">
+                <div class="voice-col"><div class="bar-val" id="t-en">35%</div><div id="v-en" class="bar"></div><div class="label">EN_SQW</div></div>
+                <div class="voice-col"><div class="bar-val" id="t-jp">35%</div><div id="v-jp" class="bar"></div><div class="label">JP_SIN</div></div>
+                <div class="voice-col"><div class="bar-val" id="t-cn">35%</div><div id="v-cn" class="bar"></div><div class="label">CN_TRI</div></div>
+                <div class="voice-col"><div class="bar-val" id="t-tw">35%</div><div id="v-tw" class="bar"></div><div class="label">TW_SAW</div></div>
+            </div>
+            <div style="font-size: 11px; color: #8b949e; margin-bottom: 5px;">DECISION_PATHWAY:</div>
+            <div id="decision-text" style="font-size: 16px; color: #fff;">等待精密意圖解析...</div>
+        </div>
+        <div class="log-panel" id="log-display"></div>
+    </div>
+
+    <div class="input-box">
+        <textarea id="user-input" placeholder="請橋主輸入複雜指令，觀察精密權重變動..."></textarea>
+        <button onclick="compile()">啟動精密編譯 (PRECISION)</button>
+    </div>
+
+    <script>
+        function log(tag, msg, color = '#8b949e') {
+            const container = document.getElementById('log-display');
+            const line = document.createElement('div');
+            line.className = 'log-line';
+            line.innerHTML = `<span style="font-weight:bold; color:${color}">[${tag}]</span> ${msg}`;
+            container.appendChild(line);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function setBar(id, percent) {
+            const maxHeight = 230;
+            const targetHeight = (percent / 100) * maxHeight;
+            document.getElementById('v-' + id).style.height = targetHeight + 'px';
+            document.getElementById('t-' + id).innerText = Math.round(percent) + '%';
+        }
+
+        async function compile() {
             const input = document.getElementById('user-input').value.trim();
             if(!input) return;
 
             document.getElementById('log-display').innerHTML = "";
             document.getElementById('core').classList.remove('locked');
-            log("INTENT", `分析橋主意圖語義特徵...`, "#fff");
+            log("INTENT", `精密掃描語義特徵...`, "#fff");
 
-            // --- 精密權重算法核心 ---
+            // --- 精密算法實作 ---
             let base = { en: 20, jp: 20, cn: 20, tw: 20 };
-            
-            // 1. 邏輯特徵掃描 (EN)
             const techMarkers = (input.match(/[a-zA-Z0-9{}<>[\]();=]/g) || []).length;
-            base.en += Math.min(techMarkers * 5, 75); // 符號與代碼越多，EN 越高
+            const emoMarkers = (input.match(/[!！?？...。，累煩煩憂傷心好情緒]/g) || []).length;
+            
+            base.en += Math.min(techMarkers * 6, 75);
+            base.jp += Math.min(emoMarkers * 9, 75);
+            base.cn += Math.min(input.length * 2.5, 75);
 
-            // 2. 情感特徵掃描 (JP)
-            const emotionalMarkers = (input.match(/[!！?？...。，累煩煩憂傷心好]/g) || []).length;
-            base.jp += Math.min(emotionalMarkers * 8, 75);
-
-            // 3. 敘事長度掃描 (CN)
-            base.cn += Math.min(input.length * 2, 75);
-
-            // 找出主導聲部
             let winner = 'cn';
             if (base.en >= base.jp && base.en >= base.cn) winner = 'en';
             else if (base.jp >= base.en && base.jp >= base.cn) winner = 'jp';
 
-            // 4. 台語收斂係數 (基於主導聲部的信心值)
-            base.tw = Math.min(base[winner] + 10, 98); 
+            base.tw = Math.min(base[winner] + 8, 98);
 
-            // --- 視覺渲染過程 ---
-            
-            // 階段一：分流 (反映原始掃描數據)
-            log("PROCESS", "執行特徵向量提取...");
+            // 階段一：特徵分流
+            log("PROCESS", "特徵矩陣提取完成，啟動聲部渲染...");
             setBar('en', Math.min(base.en, 95));
             setBar('jp', Math.min(base.jp, 95));
             setBar('cn', Math.min(base.cn, 95));
             setBar('tw', 30);
             
-            if(winner === 'en') log("EN_DATA", `>> 偵測到代碼/邏輯標記 ${techMarkers} 處，優先處理。`, "#58a6ff");
-            if(winner === 'jp') log("JP_DATA", `>> 偵測到情感/語氣偏移 ${emotionalMarkers} 處，啟動緩衝。`, "#ff7b72");
-            if(winner === 'cn') log("CN_DATA", `>> 基於文字長度 ${input.length} 展開脈絡分析。`, "#7ee787");
+            if(winner === 'en') log("EN_DATA", `>> 技術標記 ${techMarkers} 處，主導權移交 EN_VOICE。`, "#58a6ff");
+            else if(winner === 'jp') log("JP_DATA", `>> 情感偏移 ${emoMarkers} 處，主導權移交 JP_VOICE。`, "#ff7b72");
+            else log("CN_DATA", `>> 基於文字長度 ${input.length}，主導權移交 CN_VOICE。`, "#7ee787");
 
             await new Promise(r => setTimeout(r, 1200));
 
-            // 階段二：台語定音 (依據主導信心進行最後裁斷)
-            log("KERNEL", `台語聲部介入：依據「${winner.toUpperCase()}」信心值執行定音。`, "#d29922");
+            // 階段二：台語收斂
+            log("KERNEL", `台語聲部介入：執行最後決策定音...`, "#d29922");
             setBar('en', 15); setBar('jp', 15); setBar('cn', 15); 
             setBar('tw', base.tw);
             
@@ -52,7 +111,13 @@ async function compile() {
 
             // 階段三：鎖定
             document.getElementById('core').classList.add('locked');
-            document.getElementById('decision-text').innerText = `系統定音完成。信心值: ${base.tw}%`;
+            document.getElementById('decision-text').innerText = `系統定音完成。信心值: ${Math.round(base.tw)}%`;
             log("SUCCESS", `440Hz 穩態鎖定。`, "#7ee787");
             setBar('en', 35); setBar('jp', 35); setBar('cn', 35); setBar('tw', 35);
         }
+
+        setBar('en', 35); setBar('jp', 35); setBar('cn', 35); setBar('tw', 35);
+        log("SYSTEM", "Lianyiyi Kernel v1.3.6 Online.");
+    </script>
+</body>
+</html>

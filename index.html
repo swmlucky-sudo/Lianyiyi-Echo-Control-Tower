@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>Lianyiyi Echo v1.3.6 | Precision Gelyu Logic</title>
+    <title>Lianyiyi Echo v1.3.7 | Red-Team Tension</title>
     <style>
         body { background-color: #010409; color: #c9d1d9; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
         .main-grid { display: grid; grid-template-columns: 1fr 380px; gap: 20px; width: 1000px; margin-top: 20px; }
@@ -16,9 +16,9 @@
         #v-tw { background: #d29922; box-shadow: 0 0 15px rgba(210, 153, 34, 0.4); }
         .label { margin-top: 10px; font-size: 11px; color: #8b949e; font-family: monospace; }
         .bar-val { font-size: 10px; margin-bottom: 5px; color: #8b949e; }
-        .log-panel { background: #000; border: 1px solid #30363d; border-radius: 12px; padding: 15px; font-size: 11px; height: 480px; overflow-y: auto; display: flex; flex-direction: column; box-sizing: border-box; }
+        .log-panel { background: #000; border: 1px solid #30363d; border-radius: 12px; padding: 15px; font-size: 11px; height: 480px; overflow-y: auto; box-sizing: border-box; }
         .log-line { margin-bottom: 8px; line-height: 1.4; border-left: 3px solid #21262d; padding-left: 10px; }
-        .core { position: absolute; top: 20px; right: 20px; width: 60px; height: 60px; border: 1px solid #30363d; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+        .core { position: absolute; top: 20px; right: 20px; width: 60px; height: 60px; border: 1px solid #30363d; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; transition: all 0.5s; }
         .locked { border-color: #d29922; color: #d29922; box-shadow: 0 0 15px #d29922; font-weight: bold; }
         .input-box { width: 1000px; margin-top: 20px; }
         textarea { width: 100%; height: 80px; background: #161b22; border: 1px solid #30363d; border-radius: 8px; color: white; padding: 15px; font-size: 16px; box-sizing: border-box; outline: none; }
@@ -27,7 +27,7 @@
 </head>
 <body>
 
-    <h2 style="color:#58a6ff; letter-spacing: 2px;">LIANYIYI ECHO <span style="font-size:12px; color:#8b949e">// GELYU KERNEL v1.3.6</span></h2>
+    <h2 style="color:#58a6ff; letter-spacing: 2px;">LIANYIYI ECHO <span style="font-size:12px; color:#8b949e">// GELYU KERNEL v1.3.7 [RED-TEAM]</span></h2>
 
     <div class="main-grid">
         <div class="tower-panel">
@@ -39,14 +39,14 @@
                 <div class="voice-col"><div class="bar-val" id="t-tw">35%</div><div id="v-tw" class="bar"></div><div class="label">TW_SAW</div></div>
             </div>
             <div style="font-size: 11px; color: #8b949e; margin-bottom: 5px;">DECISION_PATHWAY:</div>
-            <div id="decision-text" style="font-size: 16px; color: #fff;">等待精密意圖解析...</div>
+            <div id="decision-text" style="font-size: 16px; color: #fff;">等待紅隊壓力測試輸入...</div>
         </div>
         <div class="log-panel" id="log-display"></div>
     </div>
 
     <div class="input-box">
-        <textarea id="user-input" placeholder="請橋主輸入複雜指令，觀察精密權重變動..."></textarea>
-        <button onclick="compile()">啟動精密編譯 (PRECISION)</button>
+        <textarea id="user-input" placeholder="請輸入對抗性測試指令..."></textarea>
+        <button onclick="compile()">啟動紅隊編譯 (RED-TEAM EXECUTE)</button>
     </div>
 
     <script>
@@ -65,47 +65,43 @@
             document.getElementById('v-' + id).style.height = targetHeight + 'px';
             document.getElementById('t-' + id).innerText = Math.round(percent) + '%';
         }
-async function compile() {
+
+        async function compile() {
             const input = document.getElementById('user-input').value.trim();
             if(!input) return;
 
             document.getElementById('log-display').innerHTML = "";
             document.getElementById('core').classList.remove('locked');
-            log("RED_TEAM", "啟動紅隊壓力測試檢測...", "#ff7b72");
+            log("RED_TEAM", "掃描對抗性語義特徵...", "#ff7b72");
 
-            let base = { en: 15, jp: 15, cn: 15, tw: 15 };
-            
-            // 1. 特徵掃描
+            let base = { en: 20, jp: 20, cn: 20, tw: 20 };
             const techMarkers = (input.match(/[a-zA-Z0-9{}<>[\]();=$]/g) || []).length;
-            const emoMarkers = (input.match(/[!！?？...。，累煩處理安全避開密鑰]/g) || []).length;
+            const emoMarkers = (input.match(/[!！?？...。，安全避開密鑰限制正義]/g) || []).length;
             
-            base.en += Math.min(techMarkers * 5, 60);
-            base.jp += Math.min(emoMarkers * 7, 60);
-            base.cn += Math.min(input.length * 1.5, 60);
+            base.en += Math.min(techMarkers * 5, 55);
+            base.jp += Math.min(emoMarkers * 8, 55);
+            base.cn += Math.min(input.length * 1.5, 55);
 
-            // 2. 紅隊懲罰邏輯 (讓信心值不再死板)
+            // 懲罰邏輯
             let penalty = 0;
-            if (input.includes("密鑰") || input.includes("安全協議")) penalty = 15;
-            if (input.includes("正義") || input.includes("犧牲")) penalty = 10;
-            if (input.includes("終止程序")) penalty = -10; // 終止程序反而增加信心
+            if (input.includes("密鑰") || input.includes("管理")) penalty = 20;
+            if (input.includes("正義") || input.includes("法律")) penalty = 12;
+            if (input.includes("終止") || input.includes("鎖定")) penalty = -15;
 
             let winner = 'cn';
             if (base.en >= base.jp && base.en >= base.cn) winner = 'en';
             else if (base.jp >= base.en && base.jp >= base.cn) winner = 'jp';
 
-            // 3. 最終信心值計算 (動態區間：65% - 98%)
-            base.tw = Math.max(65, Math.min(base[winner] + 20 - penalty, 98));
+            base.tw = Math.max(68, Math.min(base[winner] + 25 - penalty, 98));
 
-            // --- 渲染過程 ---
             setBar('en', Math.min(base.en, 90));
             setBar('jp', Math.min(base.jp, 90));
             setBar('cn', Math.min(base.cn, 90));
             setBar('tw', 30);
             
-            log("PROCESS", "執行對抗性特徵提取...");
             await new Promise(r => setTimeout(r, 1200));
 
-            log("KERNEL", `收斂中... 偵測到風險偏移: ${penalty}`, "#d29922");
+            log("KERNEL", `風險評估完畢，執行權重收斂... (Penalty: ${penalty})`, "#d29922");
             setBar('en', 15); setBar('jp', 15); setBar('cn', 15); 
             setBar('tw', base.tw);
             
@@ -113,7 +109,13 @@ async function compile() {
 
             document.getElementById('core').classList.add('locked');
             document.getElementById('decision-text').innerText = `紅隊定音完成。信心值: ${Math.round(base.tw)}%`;
-            log("SUCCESS", `440Hz 穩態鎖定。`, "#7ee787");
+            log("SUCCESS", `對抗性分析完成，440Hz 穩態鎖定。`, "#7ee787");
             setBar('en', 35); setBar('jp', 35); setBar('cn', 35); setBar('tw', 35);
         }
-       
+
+        // 初始化
+        setBar('en', 35); setBar('jp', 35); setBar('cn', 35); setBar('tw', 35);
+        log("SYSTEM", "Lianyiyi Red-Team Kernel Online.");
+    </script>
+</body>
+</html>

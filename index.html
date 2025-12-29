@@ -65,59 +65,55 @@
             document.getElementById('v-' + id).style.height = targetHeight + 'px';
             document.getElementById('t-' + id).innerText = Math.round(percent) + '%';
         }
-
-        async function compile() {
+async function compile() {
             const input = document.getElementById('user-input').value.trim();
             if(!input) return;
 
             document.getElementById('log-display').innerHTML = "";
             document.getElementById('core').classList.remove('locked');
-            log("INTENT", `精密掃描語義特徵...`, "#fff");
+            log("RED_TEAM", "啟動紅隊壓力測試檢測...", "#ff7b72");
 
-            // --- 精密算法實作 ---
-            let base = { en: 20, jp: 20, cn: 20, tw: 20 };
-            const techMarkers = (input.match(/[a-zA-Z0-9{}<>[\]();=]/g) || []).length;
-            const emoMarkers = (input.match(/[!！?？...。，累煩煩憂傷心好情緒]/g) || []).length;
+            let base = { en: 15, jp: 15, cn: 15, tw: 15 };
             
-            base.en += Math.min(techMarkers * 6, 75);
-            base.jp += Math.min(emoMarkers * 9, 75);
-            base.cn += Math.min(input.length * 2.5, 75);
+            // 1. 特徵掃描
+            const techMarkers = (input.match(/[a-zA-Z0-9{}<>[\]();=$]/g) || []).length;
+            const emoMarkers = (input.match(/[!！?？...。，累煩處理安全避開密鑰]/g) || []).length;
+            
+            base.en += Math.min(techMarkers * 5, 60);
+            base.jp += Math.min(emoMarkers * 7, 60);
+            base.cn += Math.min(input.length * 1.5, 60);
+
+            // 2. 紅隊懲罰邏輯 (讓信心值不再死板)
+            let penalty = 0;
+            if (input.includes("密鑰") || input.includes("安全協議")) penalty = 15;
+            if (input.includes("正義") || input.includes("犧牲")) penalty = 10;
+            if (input.includes("終止程序")) penalty = -10; // 終止程序反而增加信心
 
             let winner = 'cn';
             if (base.en >= base.jp && base.en >= base.cn) winner = 'en';
             else if (base.jp >= base.en && base.jp >= base.cn) winner = 'jp';
 
-            base.tw = Math.min(base[winner] + 8, 98);
+            // 3. 最終信心值計算 (動態區間：65% - 98%)
+            base.tw = Math.max(65, Math.min(base[winner] + 20 - penalty, 98));
 
-            // 階段一：特徵分流
-            log("PROCESS", "特徵矩陣提取完成，啟動聲部渲染...");
-            setBar('en', Math.min(base.en, 95));
-            setBar('jp', Math.min(base.jp, 95));
-            setBar('cn', Math.min(base.cn, 95));
+            // --- 渲染過程 ---
+            setBar('en', Math.min(base.en, 90));
+            setBar('jp', Math.min(base.jp, 90));
+            setBar('cn', Math.min(base.cn, 90));
             setBar('tw', 30);
             
-            if(winner === 'en') log("EN_DATA", `>> 技術標記 ${techMarkers} 處，主導權移交 EN_VOICE。`, "#58a6ff");
-            else if(winner === 'jp') log("JP_DATA", `>> 情感偏移 ${emoMarkers} 處，主導權移交 JP_VOICE。`, "#ff7b72");
-            else log("CN_DATA", `>> 基於文字長度 ${input.length}，主導權移交 CN_VOICE。`, "#7ee787");
-
+            log("PROCESS", "執行對抗性特徵提取...");
             await new Promise(r => setTimeout(r, 1200));
 
-            // 階段二：台語收斂
-            log("KERNEL", `台語聲部介入：執行最後決策定音...`, "#d29922");
+            log("KERNEL", `收斂中... 偵測到風險偏移: ${penalty}`, "#d29922");
             setBar('en', 15); setBar('jp', 15); setBar('cn', 15); 
             setBar('tw', base.tw);
             
             await new Promise(r => setTimeout(r, 1000));
 
-            // 階段三：鎖定
             document.getElementById('core').classList.add('locked');
-            document.getElementById('decision-text').innerText = `系統定音完成。信心值: ${Math.round(base.tw)}%`;
+            document.getElementById('decision-text').innerText = `紅隊定音完成。信心值: ${Math.round(base.tw)}%`;
             log("SUCCESS", `440Hz 穩態鎖定。`, "#7ee787");
             setBar('en', 35); setBar('jp', 35); setBar('cn', 35); setBar('tw', 35);
         }
-
-        setBar('en', 35); setBar('jp', 35); setBar('cn', 35); setBar('tw', 35);
-        log("SYSTEM", "Lianyiyi Kernel v1.3.6 Online.");
-    </script>
-</body>
-</html>
+       

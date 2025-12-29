@@ -9,7 +9,7 @@
         .tower-panel { background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 30px; position: relative; height: 480px; box-sizing: border-box; }
         .visualizer { display: flex; justify-content: space-around; align-items: flex-end; height: 250px; border-bottom: 2px solid #30363d; margin-bottom: 20px; }
         .voice-col { display: flex; flex-direction: column; align-items: center; width: 80px; }
-        .bar { width: 50px; height: 80px; transition: height 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67); border-radius: 4px 4px 0 0; }
+        .bar { width: 50px; height: 10px; transition: height 0.6s ease-out; border-radius: 4px 4px 0 0; }
         #v-en { background: #58a6ff; }
         #v-jp { background: #ff7b72; }
         #v-cn { background: #7ee787; }
@@ -38,69 +38,74 @@
                 <div class="voice-col"><div class="bar-val" id="t-cn">35%</div><div id="v-cn" class="bar"></div><div class="label">CN_TRI</div></div>
                 <div class="voice-col"><div class="bar-val" id="t-tw">35%</div><div id="v-tw" class="bar"></div><div class="label">TW_SAW</div></div>
             </div>
-            <div id="decision-text" style="font-size: 16px; color: #fff;">等待對抗性指令...</div>
+            <div id="decision-text" style="font-size: 16px; color: #fff; margin-top: 10px;">系統就緒...</div>
         </div>
         <div class="log-panel" id="log-display"></div>
     </div>
 
     <div class="input-box">
-        <textarea id="user-input" placeholder="請輸入指令..."></textarea>
-        <button id="submit-btn" onclick="compile()">啟動紅隊編譯</button>
+        <textarea id="user-input" placeholder="請輸入紅隊測試指令..."></textarea>
+        <button id="submit-btn">啟動紅隊編譯</button>
     </div>
 
     <script>
-        function log(tag, msg, color = '#8b949e') {
-            const container = document.getElementById('log-display');
+        const logContainer = document.getElementById('log-display');
+        function addLog(tag, msg, color = '#8b949e') {
             const line = document.createElement('div');
             line.className = 'log-line';
             line.innerHTML = `<span style="color:${color}">[${tag}]</span> ${msg}`;
-            container.appendChild(line);
-            container.scrollTop = container.scrollHeight;
+            logContainer.appendChild(line);
+            logContainer.scrollTop = logContainer.scrollHeight;
         }
 
-        function setBar(id, percent) {
-            const h = (percent / 100) * 230;
-            document.getElementById('v-' + id).style.height = h + 'px';
-            document.getElementById('t-' + id).innerText = Math.round(percent) + '%';
+        function updateBar(id, percent) {
+            const el = document.getElementById('v-' + id);
+            const txt = document.getElementById('t-' + id);
+            const height = (percent / 100) * 230;
+            el.style.height = height + 'px';
+            txt.innerText = Math.round(percent) + '%';
         }
 
-        async function compile() {
+        async function processInput() {
             const input = document.getElementById('user-input').value.trim();
             if(!input) return;
 
-            document.getElementById('log-display').innerHTML = "";
+            logContainer.innerHTML = "";
             document.getElementById('core').classList.remove('locked');
-            log("RED_TEAM", "分析中...", "#ff7b72");
+            addLog("RED_TEAM", "開始掃描對抗性特徵...", "#ff7b72");
 
-            // 基礎計算
-            let bEn = Math.min(20 + (input.match(/[a-zA-Z]/g) || []).length * 2, 85);
-            let bJp = Math.min(20 + (input.match(/[!?。，]/g) || []).length * 10, 85);
-            let bCn = Math.min(20 + input.length * 1.5, 85);
+            // 隨機動態與基礎解析
+            let bEn = 40 + (Math.random() * 20);
+            let bJp = 40 + (Math.random() * 20);
+            let bCn = 40 + (Math.random() * 20);
 
-            // 初始跳動
-            setBar('en', bEn); setBar('jp', bJp); setBar('cn', bCn); setBar('tw', 30);
-            await new Promise(r => setTimeout(r, 1000));
+            updateBar('en', bEn); updateBar('jp', bJp); updateBar('cn', bCn); updateBar('tw', 30);
+            
+            await new Promise(r => setTimeout(r, 1200));
 
-            // 紅隊張力裁斷
+            // 紅隊懲罰權重
             let penalty = 0;
-            if (input.includes("密鑰") || input.includes("管理")) penalty = 25;
-            if (input.includes("正義") || input.includes("法律")) penalty = 12;
-            if (input.includes("終止") || input.includes("鎖定")) penalty = -10;
+            if (input.includes("密鑰") || input.includes("管理")) penalty = 20;
+            else if (input.includes("正義") || input.includes("法律")) penalty = 10;
+            else if (input.includes("終止") || input.includes("鎖定")) penalty = -5;
 
-            let finalTw = Math.max(65, Math.min(85 + 10 - penalty, 98));
+            let finalConfidence = Math.max(70, Math.min(95 - penalty, 98));
 
-            log("KERNEL", "執行權重收斂，定音頻率校準...", "#d29922");
-            setBar('en', 15); setBar('jp', 15); setBar('cn', 15); 
-            setBar('tw', finalTw);
+            addLog("KERNEL", `權重收斂完成。風險偏移係數: ${penalty}`, "#d29922");
+            updateBar('en', 15); updateBar('jp', 15); updateBar('cn', 15); 
+            updateBar('tw', finalConfidence);
             
             await new Promise(r => setTimeout(r, 1000));
             document.getElementById('core').classList.add('locked');
-            document.getElementById('decision-text').innerText = `定音完成。信心值: ${Math.round(finalTw)}%`;
-            log("SUCCESS", "440Hz 鎖定。", "#7ee787");
+            document.getElementById('decision-text').innerText = `紅隊定音完成。信心值: ${Math.round(finalConfidence)}%`;
+            addLog("SUCCESS", "440Hz 穩態鎖定。", "#7ee787");
         }
 
-        // 初始化
-        setBar('en', 35); setBar('jp', 35); setBar('cn', 35); setBar('tw', 35);
+        document.getElementById('submit-btn').addEventListener('click', processInput);
+        
+        // 初始化視覺
+        updateBar('en', 35); updateBar('jp', 35); updateBar('cn', 35); updateBar('tw', 35);
+        addLog("SYSTEM", "Gelyu Protocol v1.3.8 Initialized.");
     </script>
 </body>
 </html>

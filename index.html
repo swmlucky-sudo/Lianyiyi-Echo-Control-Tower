@@ -57,6 +57,16 @@
         </div>
         <textarea id="user-input" placeholder="請橋主輸入或選擇範例..."></textarea>
         <button class="main-btn" onclick="compile()">啟動精密編譯 (PRECISION)</button>
+    <div class="input-box">
+    <div class="btn-group">
+        <span style="font-size: 11px; align-self: center; margin-right: 5px;">一鍵範例:</span>
+        <button class="preset-btn" onclick="setExample('Logic')">Tech Logic</button>
+        <button class="preset-btn" onclick="setExample('Emotion')">Emotional</button>
+        <button class="preset-btn" onclick="setExample('Mixed')">Mixed Reasoning</button>
+        <button class="preset-btn" style="background: var(--gold); color: #000; font-weight: bold; border-color: #fff;" onclick="startAutoDemo()">⚡ 啟動自動展示 (AUTO-DEMO)</button>
+    </div>
+    <textarea id="user-input" placeholder="請橋主輸入或選擇範例..."></textarea>
+    <button class="main-btn" onclick="compile()">啟動精密編譯 (PRECISION)</button>
     </div>
 <script>
         function log(tag, msg, color = '#8b949e') {
@@ -157,4 +167,5 @@
    
 </body>
 </html>
+
 

@@ -58,12 +58,21 @@
         <textarea id="user-input" placeholder="請橋主輸入或選擇範例..."></textarea>
         <button class="main-btn" onclick="compile()">啟動精密編譯 (PRECISION)</button>
     </div>
-
-    <script>
+<script>
         function log(tag, msg, color = '#8b949e') {
             const container = document.getElementById('log-display');
             container.innerHTML += `<div class="log-line"><span style="color:${color}">[${tag}]</span> ${msg}</div>`;
             container.scrollTop = container.scrollHeight;
+        }
+
+        // 模擬打字效果的函數
+        async function typeWriter(text) {
+            const el = document.getElementById('user-input');
+            el.value = "";
+            for (let i = 0; i < text.length; i++) {
+                el.value += text.charAt(i);
+                await new Promise(r => setTimeout(r, 30)); // 打字速度
+            }
         }
 
         function setExample(type) {
@@ -73,6 +82,32 @@
                 'Mixed': '請幫我優化這段代碼的效能，並解釋其邏輯架構。'
             };
             document.getElementById('user-input').value = inputs[type];
+        }
+
+        // --- 自動化展示腳本核心 ---
+        async function startAutoDemo() {
+            const examples = [
+                'Logic',
+                'Emotion',
+                'Mixed'
+            ];
+            
+            log("AUTO", "啟動自動化巡檢模式...", "#58a6ff");
+            
+            for (const type of examples) {
+                const text = {
+                    'Logic': 'const Gelyu = { mode: "Aggressive", pll: "Locked" };',
+                    'Emotion': '目前情緒波動較大，請求漣猗月影介入緩衝...',
+                    'Mixed': '系統自檢完成，準備上傳至 Devpost 平台。'
+                }[type];
+
+                log("AUTO", `正在模擬 [${type}] 測試案例...`);
+                await typeWriter(text);
+                await new Promise(r => setTimeout(r, 500));
+                await compile(); // 執行編譯
+                await new Promise(r => setTimeout(r, 2000)); // 每個案例間隔
+            }
+            log("SUCCESS", "自動化展示任務圓滿完成。", "#7ee787");
         }
 
         function setBar(id, p) {
@@ -87,55 +122,39 @@
             document.getElementById('log-display').innerHTML = "";
             document.getElementById('core').classList.remove('locked');
             document.getElementById('core').innerHTML = "440Hz<br>PLL: SCANNING";
-            log("INTENT", "啟動多模態 Intent Routing...");
-
-            // 1. 特徵計分
+            
             let s = { en: 15, jp: 15, cn: 15 };
             const techMarkers = (input.match(/[a-zA-Z0-9{}<>[\]();=]/g) || []).length;
-            const emoWords = (input.match(/(累|煩|憂|心|壓力|焦慮|好難|幫我|心情|不錯)/g) || []).length;
+            const emoWords = (input.match(/(累|煩|憂|心|壓力|焦慮|好難|幫我|心情|不|求)/g) || []).length;
             const punctMarkers = (input.match(/[!！?？]/g) || []).length;
 
             s.en += techMarkers * 10;
             s.jp += (emoWords * 20) + (punctMarkers * 12);
             s.cn += input.length * 3;
 
-            // 2. 正規化 (Normalize to 100%)
             const total = s.en + s.jp + s.cn;
-            const factor = 75 / total; // 前三聲部佔比 75%
-            let weights = {
-                en: s.en * factor,
-                jp: s.jp * factor,
-                cn: s.cn * factor,
-                tw: 25 // 基準定音權重
-            };
+            const factor = 75 / total;
+            let weights = { en: s.en * factor, jp: s.jp * factor, cn: s.cn * factor, tw: 25 };
 
-            log("ROUTING", `特徵向量提取: EN:${s.en} | JP:${s.jp} | CN:${s.cn}`);
             setBar('en', weights.en); setBar('jp', weights.jp); setBar('cn', weights.cn); setBar('tw', 15);
             await new Promise(r => setTimeout(r, 800));
 
-            // 3. PLL 鎖相環機制模擬
             const pError = (Math.random() * 0.2).toFixed(4);
-            log("PLL", `Phase Offset: ${pError}Hz. Correcting drift...`, "#ff7b72");
+            log("PLL", `Drift: ${pError}Hz. Syncing...`, "#ff7b72");
             
-            // 4. TW_SAW 最終定音
-            let winner = 'cn';
-            if (s.en >= s.jp && s.en >= s.cn) winner = 'en';
-            else if (s.jp >= s.en && s.jp >= s.cn) winner = 'jp';
-
-            log("TW_DECISION", `決策收斂: [${winner.toUpperCase()}] 主導。Enforcing closure.`, "#d29922");
+            let winner = (s.en >= s.jp && s.en >= s.cn) ? 'en' : (s.jp >= s.en && s.jp >= s.cn ? 'jp' : 'cn');
             setBar('en', 12); setBar('jp', 12); setBar('cn', 12); setBar('tw', 96);
             
             document.getElementById('core').innerHTML = "440Hz<br>PLL: LOCKED";
             document.getElementById('core').classList.add('locked');
             document.getElementById('decision-text').innerText = `Decision: Protocol ${winner.toUpperCase()} Locked.`;
-            
             await new Promise(r => setTimeout(r, 1000));
-            log("SUCCESS", "440Hz 物理定音完成，回歸穩態。", "#7ee787");
             setBar('en', 35); setBar('jp', 35); setBar('cn', 35); setBar('tw', 35);
         }
 
         setBar('en', 35); setBar('jp', 35); setBar('cn', 35); setBar('tw', 35);
-        log("SYSTEM", "Lianyiyi Kernel v1.3.8 Online.");
     </script>
+   
 </body>
 </html>
+

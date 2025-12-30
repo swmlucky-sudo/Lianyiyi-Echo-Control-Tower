@@ -66,11 +66,14 @@
         <textarea id="user-input" placeholder="請輸入指令或啟動自動展示..."></textarea>
         <button class="main-btn" onclick="compile()">執行精密編譯 (EXECUTE REASONING)</button>
     </div>
-
-    <script>
+<script>
+        // 修改後的 log 函數，確保不再清空內容
         function log(tag, msg, color = '#8b949e') {
             const container = document.getElementById('log-display');
-            container.innerHTML += `<div class="log-line"><span style="color:${color}">[${tag}]</span> ${msg}</div>`;
+            const div = document.createElement('div');
+            div.className = 'log-line';
+            div.innerHTML = `<span style="color:${color}">[${tag}]</span> ${msg}`;
+            container.appendChild(div);
             container.scrollTop = container.scrollHeight;
         }
 
@@ -94,11 +97,11 @@
 
         async function startAutoDemo() {
             const tasks = ['Logic', 'Emotion', 'Mixed'];
-            log("AUTO", "--- 啟動全自動化系統巡檢模式 ---", varName('--blue')); // 使用自定義顏色處理
+            log("AUTO", "--- 啟動全自動化系統巡檢模式 ---", "#58a6ff");
             
             for (const type of tasks) {
                 const text = {
-                    'Logic': 'DEPLOYING GELYU_PROTOCOL_V1.3.9; LOCK_CORE(440HZ);',
+                    'Logic': 'DEPLOYING GELYU_PROTOCOL_V1.4.0; LOCK_CORE(440HZ);',
                     'Emotion': '偵測到橋主情緒波動，啟動漣猗月影緩衝層...',
                     'Mixed': '自動化巡檢完成，所有聲部皆已收斂至穩定狀態。'
                 }[type];
@@ -106,7 +109,7 @@
                 await typeWriter(text);
                 await new Promise(r => setTimeout(r, 400));
                 await compile();
-                await new Promise(r => setTimeout(r, 2500));
+                await new Promise(r => setTimeout(r, 2000));
             }
         }
 
@@ -121,7 +124,11 @@
 
             const logContainer = document.getElementById('log-display');
             const now = new Date().toLocaleTimeString();
-            logContainer.innerHTML += `<div class="log-divider"></div><div class="log-timestamp">TIMESCALE: ${now}</div>`;
+            
+            // 精確插入時間戳與分割線
+            const divider = document.createElement('div');
+            divider.innerHTML = `<div class="log-divider"></div><div class="log-timestamp">TIMESCALE: ${now}</div>`;
+            logContainer.appendChild(divider);
 
             document.getElementById('core').classList.remove('locked');
             document.getElementById('core').innerHTML = "440Hz<br>PLL: SCANNING";
@@ -161,5 +168,7 @@
 
         setBar('en', 35); setBar('jp', 35); setBar('cn', 35); setBar('tw', 35);
     </script>
+   
 </body>
 </html>
+

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lianyiyi Echo v1.3.7 | Gelyu Compiler</title>
+    <title>Lianyiyi Echo v1.3.8 | Gelyu Stable Kernel</title>
     <style>
         :root { --bg: #010409; --panel: #0d1117; --border: #30363d; --blue: #58a6ff; --red: #ff7b72; --green: #7ee787; --gold: #d29922; }
         body { background: var(--bg); color: #c9d1d9; font-family: -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
@@ -13,30 +13,29 @@
         .visualizer { display: flex; justify-content: space-around; align-items: flex-end; height: 220px; border-bottom: 2px solid var(--border); margin-bottom: 20px; padding-bottom: 10px; }
         .bar-wrapper { display: flex; flex-direction: column; align-items: center; width: 60px; }
         .bar { width: 40px; height: 35px; transition: height 0.5s ease-out; border-radius: 4px 4px 0 0; }
-        #v-en { background: var(--blue); box-shadow: 0 0 10px rgba(88,166,255,0.3); }
-        #v-jp { background: var(--red); box-shadow: 0 0 10px rgba(255,123,114,0.3); }
-        #v-cn { background: var(--green); box-shadow: 0 0 10px rgba(126,231,135,0.3); }
-        #v-tw { background: var(--gold); box-shadow: 0 0 10px rgba(210,153,34,0.3); }
+        #v-en { background: var(--blue); }
+        #v-jp { background: var(--red); }
+        #v-cn { background: var(--green); }
+        #v-tw { background: var(--gold); }
         .label { margin-top: 8px; font-size: 10px; font-family: monospace; color: #8b949e; }
-        .core { position: absolute; top: 20px; right: 20px; width: 100px; height: 40px; border: 1px solid var(--border); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-family: monospace; transition: all 0.3s; }
+        .core { position: absolute; top: 20px; right: 20px; width: 110px; height: 45px; border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-family: monospace; transition: all 0.3s; text-align: center; }
         .locked { border-color: var(--gold); color: var(--gold); box-shadow: 0 0 15px var(--gold); background: rgba(210,153,34,0.1); }
         .log-panel { background: #000; border: 1px solid var(--border); border-radius: 12px; padding: 15px; font-size: 11px; height: 480px; overflow-y: auto; font-family: monospace; }
-        .log-line { margin-bottom: 6px; border-left: 2px solid #21262d; padding-left: 8px; }
+        .log-line { margin-bottom: 6px; border-left: 2px solid #21262d; padding-left: 8px; line-height: 1.4; }
         .input-box { max-width: 1100px; width: 100%; margin-top: 20px; }
-        textarea { width: 100%; height: 70px; background: #161b22; border: 1px solid var(--border); border-radius: 8px; color: white; padding: 12px; font-size: 14px; box-sizing: border-box; resize: none; }
+        textarea { width: 100%; height: 70px; background: #161b22; border: 1px solid var(--border); border-radius: 8px; color: white; padding: 12px; font-size: 14px; box-sizing: border-box; resize: none; outline: none; }
         .btn-group { display: flex; gap: 8px; margin: 10px 0; flex-wrap: wrap; }
-        .preset-btn { background: #21262d; border: 1px solid var(--border); color: #8b949e; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; transition: 0.2s; }
-        .preset-btn:hover { background: #30363d; color: white; }
-        .main-btn { width: 100%; padding: 12px; background: var(--blue); color: #0d1117; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; }
+        .preset-btn { background: #21262d; border: 1px solid var(--border); color: #8b949e; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; }
+        .main-btn { width: 100%; padding: 12px; background: var(--blue); color: #0d1117; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <h2 style="color:var(--blue); letter-spacing: 1px; margin-bottom: 10px;">LIANYIYI ECHO <span style="font-size:12px; color:#8b949e">// GELYU KERNEL v1.3.7</span></h2>
+    <h2 style="color:var(--blue); letter-spacing: 1px; margin-bottom: 15px;">LIANYIYI ECHO <span style="font-size:12px; color:#8b949e">// GELYU KERNEL v1.3.8</span></h2>
 
     <div class="main-grid">
         <div class="tower-panel">
-            <div class="core" id="core">440Hz | PLL: OFF</div>
+            <div class="core" id="core">440Hz<br>PLL: STANDBY</div>
             <div class="visualizer">
                 <div class="bar-wrapper"><div class="label" id="t-en">35%</div><div id="v-en" class="bar"></div><div class="label">EN_SQW</div></div>
                 <div class="bar-wrapper"><div class="label" id="t-jp">35%</div><div id="v-jp" class="bar"></div><div class="label">JP_SIN</div></div>
@@ -44,7 +43,7 @@
                 <div class="bar-wrapper"><div class="label" id="t-tw">35%</div><div id="v-tw" class="bar"></div><div class="label">TW_SAW</div></div>
             </div>
             <div style="font-size: 11px; color: #8b949e;">DECISION_PATHWAY:</div>
-            <div id="decision-text" style="font-size: 15px; color: #fff; margin-top:5px;">System Ready. Waiting for intent...</div>
+            <div id="decision-text" style="font-size: 15px; color: #fff; margin-top:5px;">System Stable. Ready for Instruction.</div>
         </div>
         <div class="log-panel" id="log-display"></div>
     </div>
@@ -56,8 +55,8 @@
             <button class="preset-btn" onclick="setExample('Emotion')">Emotional</button>
             <button class="preset-btn" onclick="setExample('Mixed')">Mixed Reasoning</button>
         </div>
-        <textarea id="user-input" placeholder="Enter instructions..."></textarea>
-        <button class="main-btn" onclick="compile()">啟動四語編譯 (REASONING)</button>
+        <textarea id="user-input" placeholder="請橋主輸入或選擇範例..."></textarea>
+        <button class="main-btn" onclick="compile()">啟動精密編譯 (PRECISION)</button>
     </div>
 
     <script>
@@ -69,9 +68,9 @@
 
         function setExample(type) {
             const inputs = {
-                'Logic': 'const data = await fetch("/api/v1/gelyu"); return data.json();',
-                'Emotion': '我現在真的感到很焦慮，對於未來的發展感到不知所措...',
-                'Mixed': '請幫我優化這段代碼，同時用更溫柔、更有鼓勵性的口吻來解釋。'
+                'Logic': 'const reasoning = await Gelyu.compile(input); if(reasoning.stable) return true;',
+                'Emotion': '我現在真的感到很焦慮，對於未來的開發進度感到壓力很大...',
+                'Mixed': '請幫我優化這段代碼的效能，並解釋其邏輯架構。'
             };
             document.getElementById('user-input').value = inputs[type];
         }
@@ -87,54 +86,56 @@
 
             document.getElementById('log-display').innerHTML = "";
             document.getElementById('core').classList.remove('locked');
-            document.getElementById('core').innerText = "440Hz | PLL: SCAN";
-            log("INTENT", "正在進行 Intent Routing 分析...");
+            document.getElementById('core').innerHTML = "440Hz<br>PLL: SCANNING";
+            log("INTENT", "啟動多模態 Intent Routing...");
 
-            // --- 精密特徵評分 (Scores) ---
-            let s = { en: 10, jp: 10, cn: 10 };
-            
-            // 修正 Regex Bug: 分開偵測標點與詞彙
+            // 1. 特徵計分
+            let s = { en: 15, jp: 15, cn: 15 };
             const techMarkers = (input.match(/[a-zA-Z0-9{}<>[\]();=]/g) || []).length;
-            const emoWords = (input.match(/(累|煩|憂|心|壓力|焦慮|好難|幫我)/g) || []).length;
+            const emoWords = (input.match(/(累|煩|憂|心|壓力|焦慮|好難|幫我|心情|不錯)/g) || []).length;
             const punctMarkers = (input.match(/[!！?？]/g) || []).length;
 
-            s.en += techMarkers * 8;
-            s.jp += (emoWords * 15) + (punctMarkers * 10);
-            s.cn += input.length * 2;
+            s.en += techMarkers * 10;
+            s.jp += (emoWords * 20) + (punctMarkers * 12);
+            s.cn += input.length * 3;
 
-            // --- 正規化處理 (Normalization) ---
+            // 2. 正規化 (Normalize to 100%)
             const total = s.en + s.jp + s.cn;
+            const factor = 75 / total; // 前三聲部佔比 75%
             let weights = {
-                en: (s.en / total) * 70,
-                jp: (s.jp / total) * 70,
-                cn: (s.cn / total) * 70,
-                tw: 30 // 基底收斂權重
+                en: s.en * factor,
+                jp: s.jp * factor,
+                cn: s.cn * factor,
+                tw: 25 // 基準定音權重
             };
 
-            log("ROUTING", `原始評分: EN:${s.en} JP:${s.jp} CN:${s.cn}`);
-            setBar('en', weights.en); setBar('jp', weights.jp); setBar('cn', weights.cn); setBar('tw', 10);
+            log("ROUTING", `特徵向量提取: EN:${s.en} | JP:${s.jp} | CN:${s.cn}`);
+            setBar('en', weights.en); setBar('jp', weights.jp); setBar('cn', weights.cn); setBar('tw', 15);
             await new Promise(r => setTimeout(r, 800));
 
-            // --- PLL 鎖相環機制 ---
-            const phase_error = (Math.random() * 0.4).toFixed(3);
-            log("PLL", `Phase Error detected: ${phase_error}ms. Triggering correction...`, "#ff7b72");
+            // 3. PLL 鎖相環機制模擬
+            const pError = (Math.random() * 0.2).toFixed(4);
+            log("PLL", `Phase Offset: ${pError}Hz. Correcting drift...`, "#ff7b72");
             
-            // --- TW_SAW 決策收斂 ---
-            let winner = Object.keys({en:s.en, jp:s.jp, cn:s.cn}).reduce((a, b) => s[a] > s[b] ? a : b);
-            log("TW_DECISION", `Winner identified: [${winner.toUpperCase()}]. Executing Decision Closure.`, var(--gold));
+            // 4. TW_SAW 最終定音
+            let winner = 'cn';
+            if (s.en >= s.jp && s.en >= s.cn) winner = 'en';
+            else if (s.jp >= s.en && s.jp >= s.cn) winner = 'jp';
+
+            log("TW_DECISION", `決策收斂: [${winner.toUpperCase()}] 主導。Enforcing closure.`, "#d29922");
+            setBar('en', 12); setBar('jp', 12); setBar('cn', 12); setBar('tw', 96);
             
-            setBar('en', 15); setBar('jp', 15); setBar('cn', 15); setBar('tw', 95);
-            document.getElementById('core').innerText = "440Hz | PLL: LOCKED";
+            document.getElementById('core').innerHTML = "440Hz<br>PLL: LOCKED";
             document.getElementById('core').classList.add('locked');
-            document.getElementById('decision-text').innerText = `Decision: Execute Protocol [${winner.toUpperCase()}]`;
+            document.getElementById('decision-text').innerText = `Decision: Protocol ${winner.toUpperCase()} Locked.`;
             
             await new Promise(r => setTimeout(r, 1000));
-            log("SUCCESS", "System Stabilized at 440Hz.");
+            log("SUCCESS", "440Hz 物理定音完成，回歸穩態。", "#7ee787");
             setBar('en', 35); setBar('jp', 35); setBar('cn', 35); setBar('tw', 35);
         }
 
         setBar('en', 35); setBar('jp', 35); setBar('cn', 35); setBar('tw', 35);
-        log("SYSTEM", "Lianyiyi Kernel v1.3.7 Online.");
+        log("SYSTEM", "Lianyiyi Kernel v1.3.8 Online.");
     </script>
 </body>
 </html>

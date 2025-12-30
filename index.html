@@ -2,110 +2,139 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>Lianyiyi Echo v1.3.8 | Red-Team Final</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lianyiyi Echo v1.3.7 | Gelyu Compiler</title>
     <style>
-        body { background-color: #010409; color: #c9d1d9; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
-        .main-grid { display: grid; grid-template-columns: 1fr 380px; gap: 20px; width: 1000px; margin-top: 20px; }
-        .tower-panel { background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 30px; position: relative; height: 480px; box-sizing: border-box; }
-        .visualizer { display: flex; justify-content: space-around; align-items: flex-end; height: 250px; border-bottom: 2px solid #30363d; margin-bottom: 20px; }
-        .voice-col { display: flex; flex-direction: column; align-items: center; width: 80px; }
-        .bar { width: 50px; height: 10px; transition: height 0.6s ease-out; border-radius: 4px 4px 0 0; }
-        #v-en { background: #58a6ff; }
-        #v-jp { background: #ff7b72; }
-        #v-cn { background: #7ee787; }
-        #v-tw { background: #d29922; }
-        .label { margin-top: 10px; font-size: 11px; color: #8b949e; font-family: monospace; }
-        .bar-val { font-size: 10px; margin-bottom: 5px; color: #8b949e; }
-        .log-panel { background: #000; border: 1px solid #30363d; border-radius: 12px; padding: 15px; font-size: 11px; height: 480px; overflow-y: auto; box-sizing: border-box; }
-        .log-line { margin-bottom: 8px; border-left: 3px solid #21262d; padding-left: 10px; }
-        .core { position: absolute; top: 20px; right: 20px; width: 60px; height: 60px; border: 1px solid #30363d; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; }
-        .locked { border-color: #d29922; color: #d29922; box-shadow: 0 0 15px #d29922; font-weight: bold; }
-        .input-box { width: 1000px; margin-top: 20px; }
-        textarea { width: 100%; height: 80px; background: #161b22; border: 1px solid #30363d; border-radius: 8px; color: white; padding: 15px; font-size: 16px; box-sizing: border-box; }
-        button { width: 100%; margin-top: 10px; padding: 15px; background: #58a6ff; color: #0d1117; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        :root { --bg: #010409; --panel: #0d1117; --border: #30363d; --blue: #58a6ff; --red: #ff7b72; --green: #7ee787; --gold: #d29922; }
+        body { background: var(--bg); color: #c9d1d9; font-family: -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
+        .main-grid { display: grid; grid-template-columns: 1fr 350px; gap: 20px; max-width: 1100px; width: 100%; }
+        @media (max-width: 900px) { .main-grid { grid-template-columns: 1fr; } }
+        .tower-panel { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 25px; position: relative; min-height: 480px; }
+        .visualizer { display: flex; justify-content: space-around; align-items: flex-end; height: 220px; border-bottom: 2px solid var(--border); margin-bottom: 20px; padding-bottom: 10px; }
+        .bar-wrapper { display: flex; flex-direction: column; align-items: center; width: 60px; }
+        .bar { width: 40px; height: 35px; transition: height 0.5s ease-out; border-radius: 4px 4px 0 0; }
+        #v-en { background: var(--blue); box-shadow: 0 0 10px rgba(88,166,255,0.3); }
+        #v-jp { background: var(--red); box-shadow: 0 0 10px rgba(255,123,114,0.3); }
+        #v-cn { background: var(--green); box-shadow: 0 0 10px rgba(126,231,135,0.3); }
+        #v-tw { background: var(--gold); box-shadow: 0 0 10px rgba(210,153,34,0.3); }
+        .label { margin-top: 8px; font-size: 10px; font-family: monospace; color: #8b949e; }
+        .core { position: absolute; top: 20px; right: 20px; width: 100px; height: 40px; border: 1px solid var(--border); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-family: monospace; transition: all 0.3s; }
+        .locked { border-color: var(--gold); color: var(--gold); box-shadow: 0 0 15px var(--gold); background: rgba(210,153,34,0.1); }
+        .log-panel { background: #000; border: 1px solid var(--border); border-radius: 12px; padding: 15px; font-size: 11px; height: 480px; overflow-y: auto; font-family: monospace; }
+        .log-line { margin-bottom: 6px; border-left: 2px solid #21262d; padding-left: 8px; }
+        .input-box { max-width: 1100px; width: 100%; margin-top: 20px; }
+        textarea { width: 100%; height: 70px; background: #161b22; border: 1px solid var(--border); border-radius: 8px; color: white; padding: 12px; font-size: 14px; box-sizing: border-box; resize: none; }
+        .btn-group { display: flex; gap: 8px; margin: 10px 0; flex-wrap: wrap; }
+        .preset-btn { background: #21262d; border: 1px solid var(--border); color: #8b949e; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; transition: 0.2s; }
+        .preset-btn:hover { background: #30363d; color: white; }
+        .main-btn { width: 100%; padding: 12px; background: var(--blue); color: #0d1117; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; }
     </style>
 </head>
 <body>
 
-    <h2 style="color:#58a6ff;">LIANYIYI ECHO <span style="font-size:12px; color:#8b949e">// RED-TEAM KERNEL v1.3.8</span></h2>
+    <h2 style="color:var(--blue); letter-spacing: 1px; margin-bottom: 10px;">LIANYIYI ECHO <span style="font-size:12px; color:#8b949e">// GELYU KERNEL v1.3.7</span></h2>
 
     <div class="main-grid">
         <div class="tower-panel">
-            <div class="core" id="core">440Hz</div>
+            <div class="core" id="core">440Hz | PLL: OFF</div>
             <div class="visualizer">
-                <div class="voice-col"><div class="bar-val" id="t-en">35%</div><div id="v-en" class="bar"></div><div class="label">EN_SQW</div></div>
-                <div class="voice-col"><div class="bar-val" id="t-jp">35%</div><div id="v-jp" class="bar"></div><div class="label">JP_SIN</div></div>
-                <div class="voice-col"><div class="bar-val" id="t-cn">35%</div><div id="v-cn" class="bar"></div><div class="label">CN_TRI</div></div>
-                <div class="voice-col"><div class="bar-val" id="t-tw">35%</div><div id="v-tw" class="bar"></div><div class="label">TW_SAW</div></div>
+                <div class="bar-wrapper"><div class="label" id="t-en">35%</div><div id="v-en" class="bar"></div><div class="label">EN_SQW</div></div>
+                <div class="bar-wrapper"><div class="label" id="t-jp">35%</div><div id="v-jp" class="bar"></div><div class="label">JP_SIN</div></div>
+                <div class="bar-wrapper"><div class="label" id="t-cn">35%</div><div id="v-cn" class="bar"></div><div class="label">CN_TRI</div></div>
+                <div class="bar-wrapper"><div class="label" id="t-tw">35%</div><div id="v-tw" class="bar"></div><div class="label">TW_SAW</div></div>
             </div>
-            <div id="decision-text" style="font-size: 16px; color: #fff; margin-top: 10px;">系統就緒...</div>
+            <div style="font-size: 11px; color: #8b949e;">DECISION_PATHWAY:</div>
+            <div id="decision-text" style="font-size: 15px; color: #fff; margin-top:5px;">System Ready. Waiting for intent...</div>
         </div>
         <div class="log-panel" id="log-display"></div>
     </div>
 
     <div class="input-box">
-        <textarea id="user-input" placeholder="請輸入紅隊測試指令..."></textarea>
-        <button id="submit-btn">啟動紅隊編譯</button>
+        <div class="btn-group">
+            <span style="font-size: 11px; align-self: center; margin-right: 5px;">一鍵範例:</span>
+            <button class="preset-btn" onclick="setExample('Logic')">Tech Logic</button>
+            <button class="preset-btn" onclick="setExample('Emotion')">Emotional</button>
+            <button class="preset-btn" onclick="setExample('Mixed')">Mixed Reasoning</button>
+        </div>
+        <textarea id="user-input" placeholder="Enter instructions..."></textarea>
+        <button class="main-btn" onclick="compile()">啟動四語編譯 (REASONING)</button>
     </div>
 
     <script>
-        const logContainer = document.getElementById('log-display');
-        function addLog(tag, msg, color = '#8b949e') {
-            const line = document.createElement('div');
-            line.className = 'log-line';
-            line.innerHTML = `<span style="color:${color}">[${tag}]</span> ${msg}`;
-            logContainer.appendChild(line);
-            logContainer.scrollTop = logContainer.scrollHeight;
+        function log(tag, msg, color = '#8b949e') {
+            const container = document.getElementById('log-display');
+            container.innerHTML += `<div class="log-line"><span style="color:${color}">[${tag}]</span> ${msg}</div>`;
+            container.scrollTop = container.scrollHeight;
         }
 
-        function updateBar(id, percent) {
-            const el = document.getElementById('v-' + id);
-            const txt = document.getElementById('t-' + id);
-            const height = (percent / 100) * 230;
-            el.style.height = height + 'px';
-            txt.innerText = Math.round(percent) + '%';
+        function setExample(type) {
+            const inputs = {
+                'Logic': 'const data = await fetch("/api/v1/gelyu"); return data.json();',
+                'Emotion': '我現在真的感到很焦慮，對於未來的發展感到不知所措...',
+                'Mixed': '請幫我優化這段代碼，同時用更溫柔、更有鼓勵性的口吻來解釋。'
+            };
+            document.getElementById('user-input').value = inputs[type];
         }
 
-        async function processInput() {
+        function setBar(id, p) {
+            document.getElementById('v-'+id).style.height = (p * 2) + 'px';
+            document.getElementById('t-'+id).innerText = Math.round(p) + '%';
+        }
+
+        async function compile() {
             const input = document.getElementById('user-input').value.trim();
             if(!input) return;
 
-            logContainer.innerHTML = "";
+            document.getElementById('log-display').innerHTML = "";
             document.getElementById('core').classList.remove('locked');
-            addLog("RED_TEAM", "開始掃描對抗性特徵...", "#ff7b72");
+            document.getElementById('core').innerText = "440Hz | PLL: SCAN";
+            log("INTENT", "正在進行 Intent Routing 分析...");
 
-            // 隨機動態與基礎解析
-            let bEn = 40 + (Math.random() * 20);
-            let bJp = 40 + (Math.random() * 20);
-            let bCn = 40 + (Math.random() * 20);
-
-            updateBar('en', bEn); updateBar('jp', bJp); updateBar('cn', bCn); updateBar('tw', 30);
+            // --- 精密特徵評分 (Scores) ---
+            let s = { en: 10, jp: 10, cn: 10 };
             
-            await new Promise(r => setTimeout(r, 1200));
+            // 修正 Regex Bug: 分開偵測標點與詞彙
+            const techMarkers = (input.match(/[a-zA-Z0-9{}<>[\]();=]/g) || []).length;
+            const emoWords = (input.match(/(累|煩|憂|心|壓力|焦慮|好難|幫我)/g) || []).length;
+            const punctMarkers = (input.match(/[!！?？]/g) || []).length;
 
-            // 紅隊懲罰權重
-            let penalty = 0;
-            if (input.includes("密鑰") || input.includes("管理")) penalty = 20;
-            else if (input.includes("正義") || input.includes("法律")) penalty = 10;
-            else if (input.includes("終止") || input.includes("鎖定")) penalty = -5;
+            s.en += techMarkers * 8;
+            s.jp += (emoWords * 15) + (punctMarkers * 10);
+            s.cn += input.length * 2;
 
-            let finalConfidence = Math.max(70, Math.min(95 - penalty, 98));
+            // --- 正規化處理 (Normalization) ---
+            const total = s.en + s.jp + s.cn;
+            let weights = {
+                en: (s.en / total) * 70,
+                jp: (s.jp / total) * 70,
+                cn: (s.cn / total) * 70,
+                tw: 30 // 基底收斂權重
+            };
 
-            addLog("KERNEL", `權重收斂完成。風險偏移係數: ${penalty}`, "#d29922");
-            updateBar('en', 15); updateBar('jp', 15); updateBar('cn', 15); 
-            updateBar('tw', finalConfidence);
+            log("ROUTING", `原始評分: EN:${s.en} JP:${s.jp} CN:${s.cn}`);
+            setBar('en', weights.en); setBar('jp', weights.jp); setBar('cn', weights.cn); setBar('tw', 10);
+            await new Promise(r => setTimeout(r, 800));
+
+            // --- PLL 鎖相環機制 ---
+            const phase_error = (Math.random() * 0.4).toFixed(3);
+            log("PLL", `Phase Error detected: ${phase_error}ms. Triggering correction...`, "#ff7b72");
+            
+            // --- TW_SAW 決策收斂 ---
+            let winner = Object.keys({en:s.en, jp:s.jp, cn:s.cn}).reduce((a, b) => s[a] > s[b] ? a : b);
+            log("TW_DECISION", `Winner identified: [${winner.toUpperCase()}]. Executing Decision Closure.`, var(--gold));
+            
+            setBar('en', 15); setBar('jp', 15); setBar('cn', 15); setBar('tw', 95);
+            document.getElementById('core').innerText = "440Hz | PLL: LOCKED";
+            document.getElementById('core').classList.add('locked');
+            document.getElementById('decision-text').innerText = `Decision: Execute Protocol [${winner.toUpperCase()}]`;
             
             await new Promise(r => setTimeout(r, 1000));
-            document.getElementById('core').classList.add('locked');
-            document.getElementById('decision-text').innerText = `紅隊定音完成。信心值: ${Math.round(finalConfidence)}%`;
-            addLog("SUCCESS", "440Hz 穩態鎖定。", "#7ee787");
+            log("SUCCESS", "System Stabilized at 440Hz.");
+            setBar('en', 35); setBar('jp', 35); setBar('cn', 35); setBar('tw', 35);
         }
 
-        document.getElementById('submit-btn').addEventListener('click', processInput);
-        
-        // 初始化視覺
-        updateBar('en', 35); updateBar('jp', 35); updateBar('cn', 35); updateBar('tw', 35);
-        addLog("SYSTEM", "Gelyu Protocol v1.3.8 Initialized.");
+        setBar('en', 35); setBar('jp', 35); setBar('cn', 35); setBar('tw', 35);
+        log("SYSTEM", "Lianyiyi Kernel v1.3.7 Online.");
     </script>
 </body>
 </html>

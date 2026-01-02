@@ -82,7 +82,7 @@
 
     // 新增：月影核心 (Gemini API) 呼叫邏輯
     async function callGemini(prompt) {
-        const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
         const payload = {
             contents: [{
                 parts: [{
@@ -99,17 +99,26 @@
         };
 
         try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            const data = await response.json();
-            return data.candidates[0].content.parts[0].text;
-        } catch (error) {
-            return "[ERROR] 核心連線受阻，請檢查橋主的 API Key 權限。";
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        // 如果回應不成功，直接顯示狀態碼
+        if (!response.ok) {
+            const errorDetail = await response.text();
+            console.error("Gemini API Error Detail:", errorDetail); // 在主控台顯示詳細錯誤
+            return `[ERROR] 伺服器回傳狀態: ${response.status}`;
         }
+
+        const data = await response.json();
+        return data.candidates[0].content.parts[0].text;
+    } catch (error) {
+        console.error("Fetch Error:", error);
+        return "[ERROR] 網路連線失敗，請檢查網路。";
     }
+}
 
     // 替換：具備 AI 推理能力的 compile 函式
     async function compile() {
@@ -192,6 +201,7 @@
    
 </body>
 </html>
+
 
 
 

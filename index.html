@@ -81,43 +81,34 @@
     }
 
     // 新增：月影核心 (Gemini API) 呼叫邏輯
-    async function callGemini(prompt) {
-        const url = `"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" + GEMINI_API_KEY;`;
-        const payload = {
-            contents: [{
-                parts: [{
-                    text: `你現在是「漣猗月影」系統核心。使用者是「橋主」。
-                    請針對橋主輸入的 Gelyu 語言或指令進行審計分析。
-                    回傳格式必須簡短，模擬系統日誌，包含以下三個部分：
-                    1. [ANALYSIS]: 關於代碼或情感的洞察。
-                    2. [REASONING]: 判斷依據。
-                    3. [CONCLUSION]: 定音結論。
-                    字數控制在 80 字內，專業且溫柔。
-                    輸入內容：${prompt}`
-                }]
+async function callGemini(prompt) {
+    // 關鍵：使用 gemini-3-flash-preview 模型
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${GEMINI_API_KEY}`;
+    
+    const payload = {
+        contents: [{
+            parts: [{
+                text: `你現在是「漣猗月影」系統核心。使用者是「橋主」。
+                請針對橋主輸入的格律或指令進行審計，以簡短系統日誌回傳洞察、依據與定音結論。
+                字數控制在 80 字內。
+                輸入內容：${prompt}`
             }]
-        };
+        }]
+    };
 
-        try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    });
 
-        // 如果回應不成功，直接顯示狀態碼
-        if (!response.ok) {
-            const errorDetail = await response.text();
-            console.error("Gemini API Error Detail:", errorDetail); // 在主控台顯示詳細錯誤
-            return `[ERROR] 伺服器回傳狀態: ${response.status}`;
-        }
-
-        const data = await response.json();
-        return data.candidates[0].content.parts[0].text;
-    } catch (error) {
-        console.error("Fetch Error:", error);
-        return "[ERROR] 網路連線失敗，請檢查網路。";
+    if (!response.ok) {
+        const err = await response.json();
+        return `[ERROR] ${err.error.message}`; // 這樣如果出錯，日誌會直接告訴我們原因
     }
+
+    const data = await response.json();
+    return data.candidates[0].content.parts[0].text;
 }
 
     // 替換：具備 AI 推理能力的 compile 函式
@@ -201,6 +192,7 @@
    
 </body>
 </html>
+
 
 
 

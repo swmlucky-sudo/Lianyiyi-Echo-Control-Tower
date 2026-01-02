@@ -94,7 +94,9 @@
         container.scrollTop = container.scrollHeight;
     }
 
-    //const GEMINI_API_KEY ="AIzaSyBG8M_gJDr3ayZ2jrjhdOEJCgwXPLE49-w"
+    //// 請確保金鑰是在引號內的，並且沒有被註解掉
+    const GEMINI_API_KEY = "AIzaSyBG8M_gJDr3ayZ2jrjhdOEJCgwXPLE49-w"; 
+
     async function callGemini(prompt, speed) {
         // 使用 2026 Preview 模型路徑
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${GEMINI_API_KEY}`;
@@ -247,4 +249,5 @@
     
 </body>
 </html>
+
 

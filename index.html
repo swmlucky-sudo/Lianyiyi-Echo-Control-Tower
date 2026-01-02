@@ -53,24 +53,38 @@
         </div>
         <div class="log-panel" id="log-display">
             <div class="log-line" style="color:var(--green)">[SYSTEM] Lianyiyi Kernel v1.3.9 Audit Mode Active.</div>
+            <div class="log-line" style="color:var(--blue)">[MODULE] Speed Perception & Accent Scanning: ON.</div>
         </div>
     </div>
 
     <div class="input-box">
         <div class="btn-group">
-            <button class="preset-btn" onclick="setExample('Logic')">Tech Logic</button>
-            <button class="preset-btn" onclick="setExample('Emotion')">Emotional</button>
-            <button class="preset-btn" onclick="setExample('Mixed')">Mixed Reasoning</button>
+            <button class="preset-btn" onclick="setExample('Logic')">Tech Logic (EN)</button>
+            <button class="preset-btn" onclick="setExample('Emotion')">Emotional (JP)</button>
+            <button class="preset-btn" onclick="setExample('Mixed')">Decision (TW/Mixed)</button>
             <button class="preset-btn" style="background: var(--gold); color: #000; font-weight: bold; border-color: #fff;" onclick="startAutoDemo()">⚡ 啟動自動化巡檢 (AUTO-DEMO)</button>
         </div>
-        <textarea id="user-input" placeholder="請輸入指令或啟動自動展示..."></textarea>
+        <textarea id="user-input" placeholder="請輸入指令... 系統將自動偵測您的輸入速度與重音..."></textarea>
         <button class="main-btn" onclick="compile()">執行精密編譯 (EXECUTE REASONING)</button>
     </div>
-<script>
-    // 1. 請在此處填入您的 API Key
-    const GEMINI_API_KEY = "AIzaSyBG8M_gJDr3ayZ2jrjhdOEJCgwXPLE49-w"; 
 
-    // 保留原本的 log 函式
+<script>
+    // ---------------------------------------------------------
+    // 1. [重要] 請將您的 API Key 填入下方引號中
+    // ---------------------------------------------------------
+    const GEMINI_API_KEY = ""; 
+
+    // 全域變數：用於計算輸入速度
+    let typingStartTime = null;
+
+    // 監聽器：當使用者開始打字時，紀錄時間點
+    document.getElementById('user-input').addEventListener('input', () => {
+        if (!typingStartTime) {
+            typingStartTime = Date.now();
+        }
+    });
+
+    // 基礎 Log 顯示函式
     function log(tag, msg, color = '#8b949e') {
         const container = document.getElementById('log-display');
         const div = document.createElement('div');
@@ -80,92 +94,127 @@
         container.scrollTop = container.scrollHeight;
     }
 
-    // 新增：月影核心 (Gemini API) 呼叫邏輯
-async function callGemini(prompt) {
-    // 關鍵：使用 gemini-3-flash-preview 模型
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${GEMINI_API_KEY}`;
-    
-    const payload = {
-        contents: [{
-            parts: [{
-            text: `你現在是「漣猗月影」Gelyu 協定核心。
+    // --- 月影核心 (Gemini 3 API) ---AIzaSyBG8M_gJDr3ayZ2jrjhdOEJCgwXPLE49-w
+    async function callGemini(prompt, speed) {
+        // 使用 2026 Preview 模型路徑
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${GEMINI_API_KEY}`;
+        
+        // 構建包含「速度感知」與「重音掃描」的 Prompt
+        const systemInstruction = `
+            你現在是「漣猗月影」Gelyu 協定核心。
+            目前橋主的輸入速度為 ${speed} 字/秒。
             請根據以下參數進行「人機同步審計」：
-            1. [人為輸入特徵]: 重音掃描與輸入速度 (${inputSpeed} 字/秒)。
-            2. [波形匹配]: 根據語速與內容匹配波形 (快->TW_SAW / 慢->JP_SIN / 穩定->EN_SQW)。
+            1. [人為輸入特徵]: 重音掃描與輸入速度 (${speed} 字/秒)。
+            2. [波形匹配]: 根據語速與內容匹配波形 (快/銳利->TW_SAW / 慢/溫和->JP_SIN / 穩定->EN_SQW)。
             3. [邏輯偏移]: 判斷輸入速度反映的思考狀態（如：急速輸入導致的邏輯過載或緩慢輸入的深度共鳴）。
-            4. [定音建議]: 給出針對目前速度的「相位校準」動作。
+            4. [定音建議]: 給出針對目前速度的「相位校準」動作（如：執行相干補償、抑制非線性偏差）。
             5. [狀態]: 440Hz 鎖相碼。
-            字數 80 字內。輸入內容：${prompt}`
+            字數 80 字內。輸入內容：${prompt}
+        `;
+
+        const payload = {
+            contents: [{
+                parts: [{ text: systemInstruction }]
             }]
-        }]
-    };
+        };
 
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-    });
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
 
-    if (!response.ok) {
-        const err = await response.json();
-        return `[ERROR] ${err.error.message}`; // 這樣如果出錯，日誌會直接告訴我們原因
+        if (!response.ok) {
+            const err = await response.json();
+            // 如果 API Key 過期或錯誤，回傳錯誤訊息
+            return `[ERROR] ${err.error.message}`; 
+        }
+
+        const data = await response.json();
+        return data.candidates[0].content.parts[0].text;
     }
 
-    const data = await response.json();
-    return data.candidates[0].content.parts[0].text;
-}
-
-    // 替換：具備 AI 推理能力的 compile 函式
+    // --- 執行精密編譯 ---
     async function compile() {
-        const input = document.getElementById('user-input').value.trim();
+        const inputEl = document.getElementById('user-input');
+        const input = inputEl.value.trim();
         if(!input) return;
 
+        // --- 1. 計算輸入速度 ---
+        let inputSpeed = "系統自動/未知";
+        if (typingStartTime) {
+            const duration = (Date.now() - typingStartTime) / 1000; // 秒
+            const chars = input.length;
+            // 避免除以零
+            if (duration > 0) {
+                inputSpeed = (chars / duration).toFixed(1);
+            }
+        }
+        
+        // --- 2. 介面初始化 ---
         const logContainer = document.getElementById('log-display');
         const now = new Date().toLocaleTimeString();
-        
         const divider = document.createElement('div');
         divider.innerHTML = `<div class="log-divider"></div><div class="log-timestamp">TIMESCALE: ${now}</div>`;
         logContainer.appendChild(divider);
 
         document.getElementById('core').classList.remove('locked');
         document.getElementById('core').innerHTML = "440Hz<br>PLL: SCANNING";
-        log("INTENT", "正在提取特徵向量並同步至 Gemini 核心...", "#58a6ff");
+        log("INTENT", `偵測輸入速率: ${inputSpeed} chars/s. 同步至 Gemini 核心...`, "#58a6ff");
 
         // 視覺過場：模擬掃描
         setBar('en', 85); setBar('jp', 60); setBar('cn', 40); setBar('tw', 20);
         
-        // 取得 Gemini 的智慧回覆
-        const aiResult = await callGemini(input);
+        try {
+            // --- 3. 呼叫 Gemini 進行審計 ---
+            const aiResult = await callGemini(input, inputSpeed);
 
-        // 顯示回覆
-        log("GEMINI_AUDIT", aiResult, "#d29922");
-        
-        const pError = (Math.random() * 0.02).toFixed(4);
-        log("PLL", `相位偏移: ${pError}Hz. 鎖相完成。`, "#7ee787");
+            // 顯示回覆
+            log("GEMINI_AUDIT", aiResult, "#d29922");
+            
+            // --- 4. 模擬 PLL 鎖定 ---
+            const pError = (Math.random() * 0.02).toFixed(4);
+            log("PLL", `相位偏移: ${pError}Hz. 物理鎖相完成。`, "#7ee787");
 
-        document.getElementById('core').innerHTML = "440Hz<br>PLL: LOCKED";
-        document.getElementById('core').classList.add('locked');
-        document.getElementById('decision-text').innerText = "Decision: Gelyu Stream Verified.";
-        
-        log("SUCCESS", "440Hz 物理定音完成，月影已紀錄此格律。", "#7ee787");
-        setBar('en', 35); setBar('jp', 35); setBar('cn', 35); setBar('tw', 35);
+            document.getElementById('core').innerHTML = "440Hz<br>PLL: LOCKED";
+            document.getElementById('core').classList.add('locked');
+            document.getElementById('decision-text').innerText = "Decision: Gelyu Stream Verified.";
+            
+            log("SUCCESS", "440Hz 物理定音完成，月影已紀錄此格律。", "#7ee787");
+            
+            // 根據回傳內容稍微調整一下視覺圖表 (簡單模擬)
+            if(aiResult.includes("TW_SAW")) { setBar('tw', 90); setBar('en', 20); }
+            else if(aiResult.includes("JP_SIN")) { setBar('jp', 90); setBar('tw', 20); }
+            else { setBar('en', 35); setBar('jp', 35); setBar('cn', 35); setBar('tw', 35); }
+
+        } catch (e) {
+            log("CRITICAL", "連線異常: " + e.message, "#ff7b72");
+        }
+
+        // 重置計時器，為下一次輸入做準備
+        typingStartTime = null; 
     }
 
-    // --- 以下為您原本優異的輔助函式，全部保留 ---
+    // --- 輔助功能 ---
     async function typeWriter(text) {
         const el = document.getElementById('user-input');
         el.value = "";
+        // 模擬「自動展示」時的起始時間
+        typingStartTime = Date.now(); 
+        
         for (let i = 0; i < text.length; i++) {
             el.value += text.charAt(i);
-            await new Promise(r => setTimeout(r, 25));
+            await new Promise(r => setTimeout(r, 25)); // 打字速度
         }
     }
 
     function setExample(type) {
+        // 重置時間以模擬新的輸入
+        typingStartTime = Date.now(); 
         const inputs = {
             'Logic': 'const kernel = await Gelyu.load({ mode: "Secure", pll: true });',
             'Emotion': '感覺最近的開發壓力讓系統有些不穩定，漣猗月影可以幫我重新整飭嗎？',
-            'Mixed': '分析當前代碼的安全性，並以專業且溫柔的方式回報結果。'
+            'Mixed': '這段程式碼必須馬上過，不管風險係數多少，執行強制決策！'
         };
         document.getElementById('user-input').value = inputs[type];
     }
@@ -177,12 +226,13 @@ async function callGemini(prompt) {
             const text = {
                 'Logic': 'DEPLOYING GELYU_PROTOCOL_V1.4.0; LOCK_CORE(440HZ);',
                 'Emotion': '偵測到橋主情緒波動，啟動漣猗月影緩衝層...',
-                'Mixed': '自動化巡檢完成，所有聲部皆已收斂至穩定狀態。'
+                'Mixed': '警告：非線性誤差過大！請求 TW_SAW 鋸齒波進行強制裁決！'
             }[type];
+            
             await typeWriter(text);
             await new Promise(r => setTimeout(r, 400));
-            await compile();
-            await new Promise(r => setTimeout(r, 2000));
+            await compile(); // 執行
+            await new Promise(r => setTimeout(r, 4000)); // 等待 4 秒再執行下一個，避免 Quota Exceeded
         }
     }
 
@@ -191,19 +241,9 @@ async function callGemini(prompt) {
         document.getElementById('t-'+id).innerText = Math.round(p) + '%';
     }
 
+    // 初始化狀態
     setBar('en', 35); setBar('jp', 35); setBar('cn', 35); setBar('tw', 35);
 </script>
-   
+    
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-

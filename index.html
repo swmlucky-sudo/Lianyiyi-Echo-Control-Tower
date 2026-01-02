@@ -67,108 +67,130 @@
         <button class="main-btn" onclick="compile()">執行精密編譯 (EXECUTE REASONING)</button>
     </div>
 <script>
-        // 修改後的 log 函數，確保不再清空內容
-        function log(tag, msg, color = '#8b949e') {
-            const container = document.getElementById('log-display');
-            const div = document.createElement('div');
-            div.className = 'log-line';
-            div.innerHTML = `<span style="color:${color}">[${tag}]</span> ${msg}`;
-            container.appendChild(div);
-            container.scrollTop = container.scrollHeight;
+    // 1. 請在此處填入您的 API Key
+    const GEMINI_API_KEY = "AIzaSyByg3T8Ab6WTMWuilQewPKgx5kxaXA_OXE"; 
+
+    // 保留原本的 log 函式
+    function log(tag, msg, color = '#8b949e') {
+        const container = document.getElementById('log-display');
+        const div = document.createElement('div');
+        div.className = 'log-line';
+        div.innerHTML = `<span style="color:${color}">[${tag}]</span> ${msg}`;
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    // 新增：月影核心 (Gemini API) 呼叫邏輯
+    async function callGemini(prompt) {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+        const payload = {
+            contents: [{
+                parts: [{
+                    text: `你現在是「漣猗月影」系統核心。使用者是「橋主」。
+                    請針對橋主輸入的 Gelyu 語言或指令進行審計分析。
+                    回傳格式必須簡短，模擬系統日誌，包含以下三個部分：
+                    1. [ANALYSIS]: 關於代碼或情感的洞察。
+                    2. [REASONING]: 判斷依據。
+                    3. [CONCLUSION]: 定音結論。
+                    字數控制在 80 字內，專業且溫柔。
+                    輸入內容：${prompt}`
+                }]
+            }]
+        };
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await response.json();
+            return data.candidates[0].content.parts[0].text;
+        } catch (error) {
+            return "[ERROR] 核心連線受阻，請檢查橋主的 API Key 權限。";
         }
+    }
 
-        async function typeWriter(text) {
-            const el = document.getElementById('user-input');
-            el.value = "";
-            for (let i = 0; i < text.length; i++) {
-                el.value += text.charAt(i);
-                await new Promise(r => setTimeout(r, 25));
-            }
-        }
+    // 替換：具備 AI 推理能力的 compile 函式
+    async function compile() {
+        const input = document.getElementById('user-input').value.trim();
+        if(!input) return;
 
-        function setExample(type) {
-            const inputs = {
-                'Logic': 'const kernel = await Gelyu.load({ mode: "Secure", pll: true });',
-                'Emotion': '感覺最近的開發壓力讓系統有些不穩定，漣猗月影可以幫我重新整飭嗎？',
-                'Mixed': '分析當前代碼的安全性，並以專業且溫柔的方式回報結果。'
-            };
-            document.getElementById('user-input').value = inputs[type];
-        }
+        const logContainer = document.getElementById('log-display');
+        const now = new Date().toLocaleTimeString();
+        
+        const divider = document.createElement('div');
+        divider.innerHTML = `<div class="log-divider"></div><div class="log-timestamp">TIMESCALE: ${now}</div>`;
+        logContainer.appendChild(divider);
 
-        async function startAutoDemo() {
-            const tasks = ['Logic', 'Emotion', 'Mixed'];
-            log("AUTO", "--- 啟動全自動化系統巡檢模式 ---", "#58a6ff");
-            
-            for (const type of tasks) {
-                const text = {
-                    'Logic': 'DEPLOYING GELYU_PROTOCOL_V1.4.0; LOCK_CORE(440HZ);',
-                    'Emotion': '偵測到橋主情緒波動，啟動漣猗月影緩衝層...',
-                    'Mixed': '自動化巡檢完成，所有聲部皆已收斂至穩定狀態。'
-                }[type];
+        document.getElementById('core').classList.remove('locked');
+        document.getElementById('core').innerHTML = "440Hz<br>PLL: SCANNING";
+        log("INTENT", "正在提取特徵向量並同步至 Gemini 核心...", "#58a6ff");
 
-                await typeWriter(text);
-                await new Promise(r => setTimeout(r, 400));
-                await compile();
-                await new Promise(r => setTimeout(r, 2000));
-            }
-        }
+        // 視覺過場：模擬掃描
+        setBar('en', 85); setBar('jp', 60); setBar('cn', 40); setBar('tw', 20);
+        
+        // 取得 Gemini 的智慧回覆
+        const aiResult = await callGemini(input);
 
-        function setBar(id, p) {
-            document.getElementById('v-'+id).style.height = (p * 2.2) + 'px';
-            document.getElementById('t-'+id).innerText = Math.round(p) + '%';
-        }
+        // 顯示回覆
+        log("GEMINI_AUDIT", aiResult, "#d29922");
+        
+        const pError = (Math.random() * 0.02).toFixed(4);
+        log("PLL", `相位偏移: ${pError}Hz. 鎖相完成。`, "#7ee787");
 
-        async function compile() {
-            const input = document.getElementById('user-input').value.trim();
-            if(!input) return;
-
-            const logContainer = document.getElementById('log-display');
-            const now = new Date().toLocaleTimeString();
-            
-            // 精確插入時間戳與分割線
-            const divider = document.createElement('div');
-            divider.innerHTML = `<div class="log-divider"></div><div class="log-timestamp">TIMESCALE: ${now}</div>`;
-            logContainer.appendChild(divider);
-
-            document.getElementById('core').classList.remove('locked');
-            document.getElementById('core').innerHTML = "440Hz<br>PLL: SCANNING";
-            log("INTENT", "正在提取多模態特徵向量...");
-
-            let s = { en: 15, jp: 15, cn: 15 };
-            const tech = (input.match(/[a-zA-Z0-9{}<>[\]();=]/g) || []).length;
-            const emo = (input.match(/(累|煩|憂|心|壓力|焦慮|好難|幫我|波動|穩定)/g) || []).length;
-            const punct = (input.match(/[!！?？]/g) || []).length;
-
-            s.en += tech * 12;
-            s.jp += (emo * 22) + (punct * 15);
-            s.cn += input.length * 4;
-
-            const total = s.en + s.jp + s.cn;
-            const factor = 75 / total;
-            let weights = { en: s.en * factor, jp: s.jp * factor, cn: s.cn * factor, tw: 25 };
-
-            setBar('en', weights.en); setBar('jp', weights.jp); setBar('cn', weights.cn); setBar('tw', 15);
-            await new Promise(r => setTimeout(r, 800));
-
-            const pError = (Math.random() * 0.15).toFixed(4);
-            log("PLL", `相位偏移: ${pError}Hz. 啟動鎖相校準...`, "#ff7b72");
-            
-            let winner = (s.en >= s.jp && s.en >= s.cn) ? 'en' : (s.jp >= s.en && s.jp >= s.cn ? 'jp' : 'cn');
-            log("TW_DECISION", `決策收斂: [${winner.toUpperCase()}] 主導。Enforcing closure.`, "#d29922");
-            
-            setBar('en', 12); setBar('jp', 12); setBar('cn', 12); setBar('tw', 98);
-            document.getElementById('core').innerHTML = "440Hz<br>PLL: LOCKED";
-            document.getElementById('core').classList.add('locked');
-            document.getElementById('decision-text').innerText = `Decision: Protocol ${winner.toUpperCase()} Locked.`;
-            
-            await new Promise(r => setTimeout(r, 1000));
-            log("SUCCESS", "440Hz 物理定音完成，紀錄已存檔。", "#7ee787");
-            setBar('en', 35); setBar('jp', 35); setBar('cn', 35); setBar('tw', 35);
-        }
-
+        document.getElementById('core').innerHTML = "440Hz<br>PLL: LOCKED";
+        document.getElementById('core').classList.add('locked');
+        document.getElementById('decision-text').innerText = "Decision: Gelyu Stream Verified.";
+        
+        log("SUCCESS", "440Hz 物理定音完成，月影已紀錄此格律。", "#7ee787");
         setBar('en', 35); setBar('jp', 35); setBar('cn', 35); setBar('tw', 35);
-    </script>
+    }
+
+    // --- 以下為您原本優異的輔助函式，全部保留 ---
+    async function typeWriter(text) {
+        const el = document.getElementById('user-input');
+        el.value = "";
+        for (let i = 0; i < text.length; i++) {
+            el.value += text.charAt(i);
+            await new Promise(r => setTimeout(r, 25));
+        }
+    }
+
+    function setExample(type) {
+        const inputs = {
+            'Logic': 'const kernel = await Gelyu.load({ mode: "Secure", pll: true });',
+            'Emotion': '感覺最近的開發壓力讓系統有些不穩定，漣猗月影可以幫我重新整飭嗎？',
+            'Mixed': '分析當前代碼的安全性，並以專業且溫柔的方式回報結果。'
+        };
+        document.getElementById('user-input').value = inputs[type];
+    }
+
+    async function startAutoDemo() {
+        const tasks = ['Logic', 'Emotion', 'Mixed'];
+        log("AUTO", "--- 啟動全自動化系統巡檢模式 ---", "#58a6ff");
+        for (const type of tasks) {
+            const text = {
+                'Logic': 'DEPLOYING GELYU_PROTOCOL_V1.4.0; LOCK_CORE(440HZ);',
+                'Emotion': '偵測到橋主情緒波動，啟動漣猗月影緩衝層...',
+                'Mixed': '自動化巡檢完成，所有聲部皆已收斂至穩定狀態。'
+            }[type];
+            await typeWriter(text);
+            await new Promise(r => setTimeout(r, 400));
+            await compile();
+            await new Promise(r => setTimeout(r, 2000));
+        }
+    }
+
+    function setBar(id, p) {
+        document.getElementById('v-'+id).style.height = (p * 2.2) + 'px';
+        document.getElementById('t-'+id).innerText = Math.round(p) + '%';
+    }
+
+    setBar('en', 35); setBar('jp', 35); setBar('cn', 35); setBar('tw', 35);
+</script>
    
 </body>
 </html>
+
 

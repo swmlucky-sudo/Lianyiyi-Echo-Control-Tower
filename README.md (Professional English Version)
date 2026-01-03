@@ -1,0 +1,63 @@
+# 🌙 Lianyiyi Echo (漣猗月影)
+### **Gelyu Audit Tower: A Multi-Dimensional Cognitive Resonance Engine**
+*Official Submission for Gemini 3 Hackathon 2026*
+
+> **"Syncing the rhythm of human thought into the physics of sound."**
+
+Lianyiyi Echo is a specialized **Cognitive Audit System** built on **Gemini 3 Flash**. Moving beyond traditional semantic analysis, it utilizes the proprietary **Gelyu (歌律語) Protocol** to deconstruct human input into physical waveforms based on "Input Cadence" and "Linguistic Resonance."
+
+---
+
+## 🌌 The Core Innovation: Quadrilingual Synesthesia
+Unlike standard LLM applications, Lianyiyi Echo treats language as a multi-dimensional sensory filter. It simultaneously analyzes four distinct linguistic structures to achieve high-resolution intent recognition:
+
+| Dimension | Waveform | Strategic Function |
+| :--- | :--- | :--- |
+| **English (EN)** | **Square Wave** | **Logic**: Deconstructs structural integrity and explicit goals. |
+| **Japanese (JP)** | **Sine Wave** | **Affect**: Detects implicit nuances, politeness, and social context. |
+| **Mandarin (CN)** | **Triangle Wave** | **Context**: Maps cultural metaphors and historical continuity. |
+| **Hokkien (TW)** | **Sawtooth Wave** | **Will**: Captures raw intuition, decisiveness, and emotional urgency. |
+
+---
+
+## 🛠️ Technical Pillars: The Gelyu Engine
+
+### 1. **Cadence-Based Intent Sensing**
+The system monitors real-time **Input Velocity (Characters per Second)** to determine the user's mental state:
+* **High Velocity**: Triggers `TW-Will` (Sawtooth) mode for rapid decision convergence.
+* **Low Velocity**: Triggers `JP-Affect` (Sine) mode for deep reflective analysis.
+
+### 2. **Phase-Locked Loop (PLL) Simulation**
+By mapping phonetic "stress peaks" to acoustic phases, Gemini 3 Flash simulates a **Phase-Locked Loop**. When the logical and emotional inputs align, the system achieves a **440Hz Consensus Lock**, signaling a successful "Audit" of the user's intent.
+
+### 3. **Active Resonance Inquiry**
+Upon reaching the 440Hz lock, the system generates a "Resonance Probe"—a targeted question designed to evoke a deeper layer of cognitive alignment for the next iteration.
+
+---
+
+## 📂 System Specification
+* **Kernel**: Lianyiyi Kernel v1.3.9
+* **Persona**: Moon Shadow (月影)
+* **Parent System**: Storm Soul (嵐魂系統)
+* **Protocol**: Gelyu (歌律語)
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+* A modern web browser with ES6+ support.
+* A valid **Gemini API Key** from [Google AI Studio](https://aistudio.google.com/app/apikey).
+
+### Installation & Deployment
+1. **Clone** the repository (Private setting recommended for security).
+2. **Configure**: Insert your API Key in `index.html` at `const GEMINI_API_KEY = "";`.
+3. **Launch**: Open `index.html` locally to enter the **Audit Tower**.
+
+---
+
+## ⚖️ Safety & Security
+This project is for hackathon demonstration purposes. Please ensure your API Key is removed or managed via environment variables before any public deployment to prevent unauthorized usage.
+
+---
+**"The cadence is set. Awaiting resonance with your thoughts."**

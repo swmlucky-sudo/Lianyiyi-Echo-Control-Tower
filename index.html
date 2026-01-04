@@ -3,94 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lianyiyi Echo v1.3.9 | Gelyu Audit Tower</title>
+    <title>Lianyiyi Moon Shadow v1.4.8 | Bilingual Audit Tower</title>
     <style>
         :root { --bg: #010409; --panel: #0d1117; --border: #30363d; --blue: #58a6ff; --red: #ff7b72; --green: #7ee787; --gold: #d29922; }
-        body { background: var(--bg); color: #c9d1d9; font-family: -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
-        .main-grid { display: grid; grid-template-columns: 1fr 380px; gap: 20px; max-width: 1200px; width: 100%; }
+        body { background: var(--bg); color: #c9d1d9; font-family: -apple-system, BlinkMacSystemFont, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
+        .main-grid { display: grid; grid-template-columns: 1fr 420px; gap: 20px; max-width: 1300px; width: 100%; }
         @media (max-width: 1000px) { .main-grid { grid-template-columns: 1fr; } }
-        .tower-panel { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 25px; position: relative; min-height: 500px; display: flex; flex-direction: column; justify-content: space-between; }
-        .visualizer { display: flex; justify-content: space-around; align-items: flex-end; height: 250px; border-bottom: 2px solid var(--border); margin-bottom: 20px; padding-bottom: 10px; }
-        .bar-wrapper { display: flex; flex-direction: column; align-items: center; width: 70px; }
-        .bar { width: 45px; height: 35px; transition: height 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67); border-radius: 4px 4px 0 0; }
-        #v-en { background: var(--blue); box-shadow: 0 0 15px rgba(88,166,255,0.2); }
-        #v-jp { background: var(--red); box-shadow: 0 0 15px rgba(255,123,114,0.2); }
-        #v-cn { background: var(--green); box-shadow: 0 0 15px rgba(126,231,135,0.2); }
-        #v-tw { background: var(--gold); box-shadow: 0 0 15px rgba(210,153,34,0.2); }
+        
+        .tower-panel { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 25px; position: relative; min-height: 520px; display: flex; flex-direction: column; justify-content: space-between; }
+        .visualizer { display: flex; justify-content: space-around; align-items: flex-end; height: 260px; border-bottom: 2px solid var(--border); margin-bottom: 20px; padding-bottom: 10px; }
+        .bar-wrapper { display: flex; flex-direction: column; align-items: center; width: 80px; }
+        .bar { width: 50px; height: 0px; transition: height 0.8s cubic-bezier(0.17, 0.67, 0.2, 1); border-radius: 4px 4px 0 0; position: relative; }
+        
+        #v-en { background: var(--blue); box-shadow: 0 0 20px rgba(88,166,255,0.15); }
+        #v-jp { background: var(--red); box-shadow: 0 0 20px rgba(255,123,114,0.15); }
+        #v-cn { background: var(--green); box-shadow: 0 0 20px rgba(126,231,135,0.15); }
+        #v-tw { background: var(--gold); box-shadow: 0 0 20px rgba(210,153,34,0.15); }
+        
         .label { margin-top: 10px; font-size: 11px; font-family: monospace; color: #8b949e; }
-        .core { position: absolute; top: 20px; right: 20px; width: 120px; height: 50px; border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-family: monospace; transition: all 0.3s; text-align: center; line-height: 1.2; }
-        .locked { border-color: var(--gold); color: var(--gold); box-shadow: 0 0 20px var(--gold); background: rgba(210,153,34,0.1); }
-        .log-panel { background: #000; border: 1px solid var(--border); border-radius: 12px; padding: 15px; font-size: 11px; height: 500px; overflow-y: auto; font-family: 'Cascadia Code', monospace; }
-        .log-line { margin-bottom: 6px; border-left: 2px solid #21262d; padding-left: 8px; line-height: 1.5; }
-        .log-divider { border-top: 1px dashed #30363d; margin: 15px 0; padding-top: 5px; opacity: 0.5; }
-        .log-timestamp { color: #444; font-size: 9px; margin-bottom: 4px; letter-spacing: 1px; }
-        .input-box { max-width: 1200px; width: 100%; margin-top: 20px; }
-        textarea { width: 100%; height: 80px; background: #161b22; border: 1px solid var(--border); border-radius: 8px; color: white; padding: 15px; font-size: 15px; box-sizing: border-box; resize: none; outline: none; }
-        .btn-group { display: flex; gap: 10px; margin: 12px 0; flex-wrap: wrap; }
-        .preset-btn { background: #21262d; border: 1px solid var(--border); color: #8b949e; padding: 8px 15px; border-radius: 5px; font-size: 12px; cursor: pointer; transition: 0.2s; }
-        .preset-btn:hover { background: #30363d; color: white; }
-        .main-btn { width: 100%; padding: 15px; background: var(--blue); color: #0d1117; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 15px; transition: 0.2s; }
-        .main-btn:active { transform: scale(0.99); }
+        .core { position: absolute; top: 20px; right: 20px; width: 130px; height: 55px; border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-family: monospace; transition: all 0.4s; text-align: center; }
+        .locked { border-color: var(--gold); color: var(--gold); box-shadow: 0 0 25px rgba(210,153,34,0.3); background: rgba(210,153,34,0.05); }
+        
+        .log-panel { background: #000; border: 1px solid var(--border); border-radius: 12px; padding: 18px; font-size: 12px; height: 520px; overflow-y: auto; font-family: 'Cascadia Code', monospace; }
+        .log-line { margin-bottom: 8px; border-left: 2px solid #21262d; padding-left: 10px; line-height: 1.6; animation: fadeIn 0.3s ease; }
+        
+        .input-box { max-width: 1300px; width: 100%; margin-top: 25px; }
+        textarea { width: 100%; height: 100px; background: #161b22; border: 1px solid var(--border); border-radius: 10px; color: white; padding: 18px; font-size: 16px; box-sizing: border-box; resize: none; outline: none; }
+        .btn-group { display: flex; gap: 12px; margin: 15px 0; flex-wrap: wrap; }
+        .preset-btn { background: #21262d; border: 1px solid var(--border); color: #8b949e; padding: 10px 18px; border-radius: 6px; cursor: pointer; }
+        .main-btn { width: 100%; padding: 18px; background: var(--blue); color: #0d1117; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; }
+        .main-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <h2 style="color:var(--blue); letter-spacing: 2px; margin-bottom: 15px;">LIANYIYI ECHO <span style="font-size:12px; color:#8b949e">// GELYU AUDIT TOWER v1.3.9</span></h2>
+    <h2 style="color:var(--blue); letter-spacing: 3px; margin-bottom: 20px;">
+        LIANYIYI ECHO <span style="font-size:13px; color:#8b949e">// BILINGUAL AUDIT TOWER v1.4.8</span>
+    </h2>
 
     <div class="main-grid">
         <div class="tower-panel">
-            <div class="core" id="core">440Hz<br>PLL: STANDBY</div>
+            <div class="core" id="core">CORE: 440Hz<br>STATUS: IDLE</div>
             <div class="visualizer">
-                <div class="bar-wrapper"><div class="label" id="t-en">35%</div><div id="v-en" class="bar"></div><div class="label">EN_SQW</div></div>
-                <div class="bar-wrapper"><div class="label" id="t-jp">35%</div><div id="v-jp" class="bar"></div><div class="label">JP_SIN</div></div>
-                <div class="bar-wrapper"><div class="label" id="t-cn">35%</div><div id="v-cn" class="bar"></div><div class="label">CN_TRI</div></div>
-                <div class="bar-wrapper"><div class="label" id="t-tw">35%</div><div id="v-tw" class="bar"></div><div class="label">TW_SAW</div></div>
+                <div class="bar-wrapper"><div class="label" id="t-en">0%</div><div id="v-en" class="bar"></div><div class="label">LOGIC</div></div>
+                <div class="bar-wrapper"><div class="label" id="t-jp">0%</div><div id="v-jp" class="bar"></div><div class="label">AFFECT</div></div>
+                <div class="bar-wrapper"><div class="label" id="t-cn">0%</div><div id="v-cn" class="bar"></div><div class="label">CONTEXT</div></div>
+                <div class="bar-wrapper"><div class="label" id="t-tw">0%</div><div id="v-tw" class="bar"></div><div class="label">WILL</div></div>
             </div>
             <div>
-                <div style="font-size: 11px; color: #8b949e; text-transform: uppercase; letter-spacing: 1px;">Decision Pathway:</div>
-                <div id="decision-text" style="font-size: 16px; color: #fff; margin-top:5px; font-weight: 500;">Waiting for Gelyu Stream...</div>
+                <div style="font-size: 11px; color: #8b949e; text-transform: uppercase; letter-spacing: 2px;">Audit Insight Pathway:</div>
+                <div id="decision-text" style="font-size: 18px; color: #fff; margin-top:8px;">Ready for Global Pulse...</div>
             </div>
         </div>
         <div class="log-panel" id="log-display">
-            <div class="log-line" style="color:var(--green)">[SYSTEM] Lianyiyi Kernel v1.3.9 Audit Mode Active.</div>
-            <div class="log-line" style="color:var(--blue)">[MODULE] Speed Perception & Accent Scanning: ON.</div>
+            <div class="log-line" style="color:var(--green)">[SYSTEM] Moon Shadow v1.4.8 Bilingual Kernel Active.</div>
+            <div class="log-line" style="color:var(--blue)">[MODULE] Cognitive Tension Analysis: ENABLED.</div>
         </div>
     </div>
 
     <div class="input-box">
         <div class="btn-group">
-            <button class="preset-btn" onclick="setExample('Logic')">Tech Logic (EN)</button>
-            <button class="preset-btn" onclick="setExample('Emotion')">Emotional (JP)</button>
-            <button class="preset-btn" onclick="setExample('Mixed')">Decision (TW/Mixed)</button>
-            <button class="preset-btn" style="background: var(--gold); color: #000; font-weight: bold; border-color: #fff;" onclick="startAutoDemo()">⚡ 啟動自動化巡檢 (AUTO-DEMO)</button>
+            <button class="preset-btn" onclick="setExample('Logic')">Logic Audit (EN)</button>
+            <button class="preset-btn" onclick="setExample('Emotion')">Affect Probe (JP)</button>
+            <button class="preset-btn" onclick="setExample('Mixed')">Dissonance Test (TW/Mixed)</button>
+            <button class="preset-btn" style="background: var(--gold); color: #000; font-weight: bold;" onclick="startAutoDemo()">⚡ 啟動雙語自動化演示 (BILINGUAL AUTO-DEMO)</button>
         </div>
-        <textarea id="user-input" placeholder="請輸入指令... 系統將自動偵測您的輸入速度與重音..."></textarea>
-        <button class="main-btn" onclick="compile()">執行精密編譯 (EXECUTE REASONING)</button>
+        <textarea id="user-input" placeholder="Enter message for bilingual cognitive audit..."></textarea>
+        <button class="main-btn" id="execute-btn" onclick="compile()">EXECUTE BILINGUAL AUDIT</button>
     </div>
 
 <script>
-    // 1. [核心金鑰] 請在此處填入您的 API Key
-    const GEMINI_API_KEY = "API Key"; 
-
-    // 2. [全域變數]
+    const GEMINI_API_KEY = "在此填入您的 API KEY"; 
     let typingStartTime = null;
+    let isCompiling = false;
 
-    // 3. [監聽器] 紀錄輸入啟動時間
-    document.addEventListener('DOMContentLoaded', () => {
-        const inputArea = document.getElementById('user-input');
-        if (inputArea) {
-            inputArea.addEventListener('input', () => {
-                if (!typingStartTime) {
-                    typingStartTime = Date.now();
-                }
-            });
+    function updateVisualizer(tension, speed) {
+        setBar('en', Math.min(tension * 1.2, 100)); 
+        setBar('jp', Math.max(100 - tension, 10));  
+        setBar('cn', 30 + (Math.random() * 40));    
+        setBar('tw', Math.min(parseFloat(speed) * 8, 100)); 
+    }
+
+    function setBar(id, p) {
+        const el = document.getElementById('v-' + id);
+        const txt = document.getElementById('t-' + id);
+        if (el) el.style.height = (p * 2.2 + 10) + 'px';
+        if (txt) txt.innerText = Math.round(p) + '%';
+    }
+
+    function resetToInitial() {
+        ['en', 'jp', 'cn', 'tw'].forEach(id => setBar(id, 0));
+        document.getElementById('decision-text').innerText = "System Idle. Awaiting Pulse...";
+    }
+
+    async function callGemini(prompt, speed) {
+        if (!GEMINI_API_KEY || GEMINI_API_KEY.includes("填入")) throw new Error("API Key Missing.");
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${GEMINI_API_KEY}`;
+        
+        const payload = {
+            contents: [{
+                parts: [{
+                    text: `[SYSTEM_DIRECTIVE] 你現在是「漣猗月影」。請提供中英雙語(Bilingual)分析。
+                    文字："${prompt}"
+                    流速：${speed} chars/s
+                    
+                    格式要求：
+                    [ENERGY_AUDIT] {中文狀態} / {English_Status}
+                    [WAVEFORM_ANALYSIS] Tension_Level: {數字}%
+                    [MOON_SHADOW_OBSERVATION / 月影觀測]
+                    {中文洞察內容}
+                    ---
+                    {English_Insight}`
+                }]
+            }]
+        };
+
+        const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error ? data.error.message : "API 通訊失敗");
+        return data.candidates[0].content.parts[0].text;
+    }
+
+    async function compile() {
+        if (isCompiling) return;
+        const input = document.getElementById('user-input').value.trim();
+        if (!input) return;
+
+        try {
+            isCompiling = true;
+            document.getElementById('execute-btn').disabled = true;
+            let speed = 0;
+            if (typingStartTime) {
+                const duration = (Date.now() - typingStartTime) / 1000;
+                speed = (input.length / Math.max(duration, 0.5)).toFixed(1);
+            }
+
+            log("INTENT", `Input Speed: ${speed} chars/s`, "#58a6ff");
+            const aiResult = await callGemini(input, speed);
+            
+            const tensionMatch = aiResult.match(/Tension_Level:\s*(\d+)/i);
+            const tensionValue = tensionMatch ? parseInt(tensionMatch[1]) : 50;
+            updateVisualizer(tensionValue, speed);
+
+            let displayHtml = aiResult
+                .replace(/\[ENERGY_AUDIT\]/g, "🔴 <b>[Status Audit]</b>")
+                .replace(/\[WAVEFORM_ANALYSIS\] Tension_Level: (\d+)%/g, "📊 <b>[Waveform] Level $1%</b>")
+                .replace(/\[MOON_SHADOW_OBSERVATION \/ 月影觀測\]/g, "<hr style='border:1px dashed #333;margin:10px 0;'>🌙 <b>[Bilingual Observation]</b>");
+
+            log("GEMINI_AUDIT", `<div style="background:#161b22; padding:15px; border-radius:8px; line-height:1.6;">${displayHtml}</div>`, "#d29922");
+            document.getElementById('core').classList.add('locked');
+            document.getElementById('decision-text').innerText = "Audit Verified.";
+
+        } catch (error) {
+            log("SYSTEM_ERROR", `Interrupted: ${error.message}`, "#ff7b72");
+        } finally {
+            isCompiling = false;
+            document.getElementById('execute-btn').disabled = false;
+            typingStartTime = null;
         }
-    });
+    }
 
-    // 4. [基礎日誌函式]
+    function setExample(type) {
+        typingStartTime = Date.now() - 3000; 
+        const inputs = {
+            'Logic': 'System synchronization initialized at 440Hz, filtering non-linear interference.',
+            'Emotion': 'In this dull world, occasional luck is my only sanctuary.',
+            'Mixed': 'Reality is brutal, yet I choose to execute this plan at all costs.'
+        };
+        document.getElementById('user-input').value = inputs[type];
+        log("SYSTEM", `Sequence Loaded: ${type}`, "#8b949e");
+    }
+
+    async function startAutoDemo() {
+        const tasks = ['Logic', 'Emotion', 'Mixed'];
+        log("AUTO_MODE", "Starting Bilingual Sequence Audit...", "#d29922");
+        for (const type of tasks) {
+            setExample(type);
+            await compile(); 
+            log("AUTO_MODE", "Cooling down (15s)...", "#555");
+            await new Promise(r => setTimeout(r, 15000)); 
+        }
+        log("AUTO_MODE", "✅ Demo Completed.", "#7ee787");
+    }
+
     function log(tag, msg, color = '#8b949e') {
         const container = document.getElementById('log-display');
-        if (!container) return;
         const div = document.createElement('div');
         div.className = 'log-line';
         div.innerHTML = `<span style="color:${color}">[${tag}]</span> ${msg}`;
@@ -98,117 +196,11 @@
         container.scrollTop = container.scrollHeight;
     }
 
-    // 5. [月影核心 API 呼叫]
-    async function callGemini(prompt, speed) {
-        if (!GEMINI_API_KEY) return "[ERROR] 尚未偵測到金鑰。";
-        
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${GEMINI_API_KEY}`;
-        
-        const systemInstruction = `你現在是「漣猗月影」Gelyu 協定核心。目前輸入速度 ${speed} 字/秒。請進行「頻譜審計」：1.[波形匹配] 2.[狀態分析] 3.[定音] (440Hz 鎖相)。字數 80 字內。內容：${prompt}`;
+    document.getElementById('user-input').addEventListener('input', () => {
+        if (!typingStartTime) typingStartTime = Date.now();
+    });
 
-        const payload = {
-            contents: [{ parts: [{ text: systemInstruction }] }]
-        };
-
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            const data = await response.json();
-            if (!response.ok) return `[ERROR] ${data.error.message}`;
-            return data.candidates[0].content.parts[0].text;
-        } catch (e) {
-            return `[ERROR] 連線中斷: ${e.message}`;
-        }
-    }
-
-    // 6. [核心編譯函式]
-    async function compile() {
-        const inputEl = document.getElementById('user-input');
-        const input = inputEl.value.trim();
-        if(!input) return;
-
-        // 計算速度
-        let inputSpeed = 0;
-        if (typingStartTime) {
-            const duration = (Date.now() - typingStartTime) / 1000;
-            inputSpeed = (input.length / (duration || 1)).toFixed(1);
-        }
-
-        // 初始化視覺
-        const logContainer = document.getElementById('log-display');
-        const now = new Date().toLocaleTimeString();
-        const divider = document.createElement('div');
-        divider.innerHTML = `<div class="log-divider"></div><div class="log-timestamp">TIMESCALE: ${now}</div>`;
-        logContainer.appendChild(divider);
-
-        document.getElementById('core').innerHTML = "440Hz<br>PLL: SCANNING";
-        log("INTENT", `偵測輸入速率: ${inputSpeed} chars/s.`, "#58a6ff");
-
-        try {
-            const aiResult = await callGemini(input, inputSpeed);
-            log("GEMINI_AUDIT", aiResult, "#d29922");
-            
-            const pError = (Math.random() * 0.02).toFixed(4);
-            log("PLL", `相位偏移: ${pError}Hz. 物理鎖相完成。`, "#7ee787");
-
-            document.getElementById('core').innerHTML = "440Hz<br>PLL: LOCKED";
-            document.getElementById('core').classList.add('locked');
-            document.getElementById('decision-text').innerText = "Decision: Gelyu Stream Verified.";
-            log("SUCCESS", "440Hz 物理定音完成。", "#7ee787");
-
-            // 簡易波形視覺回饋
-            if(aiResult.includes("TW_SAW")) { setBar('tw', 90); setBar('en', 20); }
-            else if(aiResult.includes("JP_SIN")) { setBar('jp', 90); setBar('tw', 20); }
-            else { setBar('en', 80); setBar('jp', 30); }
-
-        } catch (e) {
-            log("CRITICAL", "編譯失敗", "#ff7b72");
-        }
-        typingStartTime = null; 
-    }
-
-    // 7. [輔助函式]
-    function setBar(id, p) {
-        const el = document.getElementById('v-'+id);
-        const txt = document.getElementById('t-'+id);
-        if(el) el.style.height = (p * 2.2) + 'px';
-        if(txt) txt.innerText = Math.round(p) + '%';
-    }
-
-    function setExample(type) {
-        typingStartTime = Date.now(); 
-        const inputs = {
-            'Logic': 'const kernel = await Gelyu.load({ mode: "Secure", pll: true });',
-            'Emotion': '感覺最近的開發壓力讓系統有些不穩定...',
-            'Mixed': '執行強制決策，立刻同步所有聲部！'
-        };
-        document.getElementById('user-input').value = inputs[type];
-    }
-
-    async function startAutoDemo() {
-        const tasks = ['Logic', 'Emotion', 'Mixed'];
-        for (const type of tasks) {
-            setExample(type);
-            await new Promise(r => setTimeout(r, 500));
-            await compile();
-            await new Promise(r => setTimeout(r, 4000));
-        }
-    }
-
-    // 初始化
-    setBar('en', 35); setBar('jp', 35); setBar('cn', 35); setBar('tw', 35);
+    resetToInitial();
 </script>
-    
 </body>
 </html>
-
-
-
-
-
-
-

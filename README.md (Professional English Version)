@@ -2,43 +2,43 @@
 ### **Gelyu Audit Tower: A Multi-Dimensional Cognitive Resonance Engine**
 *Official Submission for Gemini 3 Hackathon 2026*
 
-> **"Beyond Semantics: Decoding the Physics of Intent through Behavioral Resonance."**
+> **"Optimizing Signal Integrity: Synchronizing Input Dynamics into the Physics of Interaction."**
 
 ---
 
 ## 🎥 System Demonstration
 ![Lianyiyi Echo Demo](YOUR_GIF_URL_HERE)
-*Figure 1: Real-time auditing of "Expression Cost" and "Action Closure" using Gemini 3 Flash.*
+*Figure 1: Real-time analysis of "Behavioral Cadence" and "Signal Alignment" using Gemini 3 Flash.*
 
 ---
 
-## 🌌 The Core Innovation: Solving the Behavioral Void
-Current LLMs suffer from a "Behavioral Blind Spot": they process *what* is said, but are blind to *how* it is typed. **Lianyiyi Echo** captures the **"Expression Cost"** of human interaction, treating typing cadence as a vital biological signal.
+## 🌌 The Core Innovation: Closing the Contextual Gap
+Modern LLMs primarily process static semantic data, often overlooking the vital **temporal signals** generated during human-AI interaction. **Lianyiyi Echo** introduces a behavioral-first approach, treating typing rhythm and input velocity as high-fidelity biological signals that inform the model's reasoning state.
 
-### **Quadrilingual Synesthesia**
-The system simultaneously analyzes four linguistic structures to achieve high-resolution intent recognition:
+### **Quadrilingual Synesthesia (Gelyu Protocol)**
+The system maps linguistic structures to physical waveforms to optimize real-time processing:
 
-| Dimension | Waveform | Strategic Function | Behavioral Signal |
+| Dimension | Waveform | Strategic Function | Behavioral Data Point |
 | :--- | :--- | :--- | :--- |
-| **English (EN)** | **Square Wave** | **Logic**: Goal integrity. | Structural Precision |
-| **Japanese (JP)** | **Sine Wave** | **Affect**: Implicit nuances. | Hesitation & Reflection |
-| **Mandarin (CN)** | **Triangle Wave** | **Context**: Cultural depth. | Metaphorical Mapping |
-| **Hokkien (TW)** | **Will**: Decisive action. | **Sawtooth Wave** | **Action Closure / Surge** |
+| **English (EN)** | **Square Wave** | **Logic**: Structural auditing. | Syntactic Precision |
+| **Japanese (JP)** | **Sine Wave** | **Affect**: Nuance sensing. | Input Latency / Hesitation |
+| **Mandarin (CN)** | **Triangle Wave** | **Context**: Meta-data mapping. | Pattern Consistency |
+| **Hokkien (TW)** | **Sawtooth Wave** | **Will**: Goal convergence. | **Action Threshold / Surge** |
 
 ---
 
 ## 🛠️ Technical Pillars: The Gelyu Engine
 
-### 1. **Cadence-Based Intent Sensing**
-The system monitors real-time **Input Velocity (Chars/s)** to audit the user's mental state:
-* **High Velocity (Surge)**: Signals **Low Exploration Space**. Options are closed; the user is in "Execution Mode."
-* **Low Velocity (Stasis)**: Signals **High Expression Cost**. The user is in "Reflection Mode," requiring higher affective smoothing.
+### 1. **Cadence-Based Intent Auditing**
+By monitoring **Input Velocity (Chars/s)**, the system calculates the "Expression Cost" of a query:
+* **High-Speed Flux**: Signals low exploration overhead. The system accelerates towards **Action Closure**.
+* **Low-Speed Stasis**: Signals high cognitive overhead. The system increases **Affective Smoothing** to match the user's pace.
 
-### 2. **Phase-Locked Loop (PLL) Alignment**
-Powered by **Gemini 3 Flash's ultra-low latency**, the system simulates a **Phase-Locked Loop**. It normalizes heterogeneous inputs (rhythm, formatting, semantics) into a stable **440Hz Resonance**, ensuring the AI's internal state is perfectly aligned with the user's **Behavioral Pulse**.
+### 2. **Phase-Locked Loop (PLL) Simulation**
+Leveraging the **Gemini 3 Flash ultra-low latency**, the engine normalizes heterogeneous behavioral inputs into a stable **440Hz Resonance**. This ensures the AI's internal response parameters are perfectly synced with the user's **Interactive Cadence**.
 
-### 3. **Defensive Signal Detection**
-By recognizing abnormal spacing (e.g., full-width characters) as **"Intentional Distortion"** rather than noise, the tower can audit psychological defense mechanisms and perceived distance.
+### 3. **Anomalous Signal Detection**
+The tower recognizes non-standard formatting (e.g., specific character spacing) as **"Intentional Signal Distortion"** rather than noise, allowing for a higher resolution of behavioral auditing without manual labeling.
 
 ---
 
@@ -55,15 +55,15 @@ By recognizing abnormal spacing (e.g., full-width characters) as **"Intentional 
 ### Prerequisites
 * A valid **Gemini API Key** from [Google AI Studio](https://aistudio.google.com/app/apikey).
 
-### Installation & Usage
+### Deployment
 1. **Clone** the repository.
-2. **Deploy**: Open `index.html` in any modern browser.
-3. **Audit**: Enter the **Console (F12)** to observe real-time cognitive tension logs during input.
+2. **Launch**: Open `index.html` in a modern browser.
+3. **Monitor**: Open **Console (F12)** to view real-time behavioral logs and PLL resonance locks.
 
 ---
 
-## ⚖️ Safety & Security
-This project is for hackathon demonstration. Please manage your API keys responsibly and refer to the [Gemini API Safety Guidelines](https://ai.google.dev/gemini-api/docs/safety-guidelines).
+## ⚖️ Disclaimer & Security
+This project is developed for the 2026 Gemini 3 Hackathon. All behavioral auditing is performed locally and utilized solely for improving the immediate interaction quality between the user and the AI model.
 
 ---
-**"The cadence is set. Awaiting resonance with your thoughts."**
+**"Signal synchronized. Awaiting resonance."**

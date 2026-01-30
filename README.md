@@ -1,61 +1,77 @@
 # 🌙 Lianyiyi Echo (漣猗月影)
-### **Gelyu Audit Tower: A Quadrilingual Physical Resonance Engine**
-*An Entry for Gemini 3 Hackathon 2026*
+### **Gelyu Audit Tower: A Multi-Dimensional Cognitive Resonance Engine**
+*Official Submission for Gemini 3 Hackathon 2026*
 
-> **「於四語格律中，定格思維的物理瞬間。」**
+> **"Optimizing Signal Integrity: Synchronizing Input Dynamics into the Physics of Interaction."**
 
-Lianyiyi Echo 是一套基於 **Gemini 3 Flash** 的多模態語言審計系統。它跳脫了傳統的純語意理解，利用獨創的 **Gelyu (歌律語) 協定**，將人類輸入的「節奏感」與「語系結構」轉化為物理波形，達成人機思維的 **440Hz 鎖相定音**。
-
----
-
-## 🌌 核心創意：四語聯覺解構 (Quadrilingual Synesthesia)
-本系統不只是翻譯，而是將四種結構迥異的語言視為捕捉意圖的「物理濾鏡」。當橋主（使用者）輸入內容時，系統會同步進行四個維度的能量拆解：
-
-| 維度 (Dimension) | 對應波形 (Waveform) | 解構功能 (Function) |
-| :--- | :--- | :--- |
-| **English (EN)** | **Square Wave (方波)** | **Logic (邏輯)**：拆解語義的骨架與目標。 |
-| **日本語 (JP)** | **Sine Wave (正弦波)** | **Affect (情感)**：感應隱含情緒與語境禮節。 |
-| **中文 (CN)** | **Triangle Wave (三角波)** | **Context (文脈)**：聯想背景深度與文化隱喻。 |
-| **台語 (TW)** | **Sawtooth Wave (鋸齒波)** | **Will (意志)**：捕捉直覺衝動與決斷強度。 |
+[English Version](#english-version) | [中文說明](#中文說明)
 
 ---
 
-## 🛠️ 技術主軸：歌律語 (Gelyu) 物理引擎
+<a name="english-version"></a>
+## 🌌 The Core Innovation: Closing the Contextual Gap
+Modern LLMs primarily process static semantic data, often overlooking the vital **temporal signals** generated during human-AI interaction. **Lianyiyi Echo** introduces a behavioral-first approach, treating typing rhythm and input velocity as high-fidelity biological signals that inform the model's reasoning state.
 
-### 1. **流速感知推理 (Cadence-Based Reasoning)**
-系統即時計算使用者的 **Input Velocity (字數/秒)**。
-* **高流速 (High Velocity)**：觸發 `TW-Will` 鋸齒波，代表決策衝突與意志收斂。
-* **低流速 (Low Velocity)**：觸發 `JP-Affect` 正弦波，代表深層沉思與情緒修辭。
+### **Quadrilingual Synesthesia (Gelyu Protocol)**
+The system maps linguistic structures to physical waveforms to optimize real-time processing:
 
-### 2. **相位鎖定迴路 (PLL) 模擬**
-利用 Gemini 3 的高速推理能力，將輸入的「重音」與「節奏」映射至物理相位。當邏輯與情感達成共識時，系統會顯示 **440Hz LOCKED**，象徵完成一次精準的語義定音。
-
-### 3. **主動共振反問 (Active Resonance)**
-基於四語維度的解構結果，月影核心會拋出一個具備「物理感」的反問，引發下一輪更高維度的思維共振。
-
----
-
-## 🚀 快速啟動 (Getting Started)
-
-1. **環境需求**：支援 ES6+ 的現代瀏覽器，以及有效的 **Gemini API Key**。
-2. **安裝**：
-   - Clone 本儲存庫（建議設為 Private）。
-   - 在 `index.html` 中填入您的 `GEMINI_API_KEY`。
-   - 直接開啟 `index.html` 進入 **Audit Tower**。
-3. **展示建議**：嘗試以不同的「語速」輸入相同內容，觀察四維度能量條（Bars）的動態偏移。
+| Dimension | Waveform | Strategic Function | Behavioral Data Point |
+| :--- | :--- | :--- | :--- |
+| **English (EN)** | **Square Wave** | **Logic**: Structural auditing. | Syntactic Precision |
+| **Japanese (JP)** | **Sine Wave** | **Affect**: Nuance sensing. | Input Latency / Hesitation |
+| **Mandarin (CN)** | **Triangle Wave** | **Context**: Meta-data mapping. | Pattern Consistency |
+| **Hokkien (TW)** | **Sawtooth Wave** | **Will**: Goal convergence. | **Action Threshold / Surge** |
 
 ---
 
-## 📂 系統架構
-* **Kernel**: Lianyiyi Kernel v1.3.9
-* **Persona**: Moon Shadow (月影)
-* **Sub-system**: 嵐魂系統 (Storm Soul) 之妹妹系統
-* **Protocol**: Gelyu (歌律語)
+## 🛠️ Technical Pillars: The Gelyu Engine
+
+### 1. **Cadence-Based Intent Auditing**
+By monitoring **Input Velocity (Chars/s)**, the system calculates the "Expression Cost" of a query:
+* **High-Speed Flux**: Signals low exploration overhead.
+* **Low-Speed Stasis**: Signals high cognitive overhead, matching the user's pace via **Affective Smoothing**.
+
+### 2. **Phase-Locked Loop (PLL) Simulation**
+Leveraging **Gemini 3 Flash**, the engine normalizes behavioral inputs into a stable **440Hz Resonance**, syncing the AI's response parameters with the user's **Interactive Cadence**.
 
 ---
 
-## ⚖️ 安全聲明
-本專案為 Hackathon 競賽展示用途。若需公開展示，請務必移除代碼中的 API Key，或使用環境變數進行管理。
+<a name="中文說明"></a>
+## 🏮 中文說明 (System Philosophy)
+
+### **開發動機與核心邏輯**
+「漣猗月影」是基於嵐魂系統（Storm Soul）開發的子系統，旨在打破傳統 AI 僅處理文字語義的限制。透過 **Gelyu Language v2.8 (SVMP Integrated)**，我們將輸入行為轉化為物理波形：
+* **鏡面態優先於漣漪態**：確保信號的真實性（求真為本）。
+* **格律為骨**：以節奏與律動作為 AI 推理的底層約束。
+
+### **交互頻率特徵記錄**
+系統會學習使用者的「輸入頻率特徵」。當使用者的情緒或節奏偏離基準頻率時，系統能透過即時提醒（如入耳式監聽模擬）提供物理性的反饋。
 
 ---
-**「格律已定，期待與您的思維共振。」**
+
+## 🚀 Getting Started
+
+### Prerequisites
+* A valid **Gemini API Key** from [Google AI Studio](https://aistudio.google.com/app/apikey).
+
+### Deployment
+1. **Clone** the repository.
+2. **Launch**: Open `index.html` in a modern browser.
+3. **Monitor**: Open **Console (F12)** to view real-time logs.
+
+---
+
+## ⚖️ License & Attribution
+
+### **Software License**
+This project is developed for the 2026 Gemini 3 Hackathon. All behavioral auditing is performed locally.
+
+### **Music Attribution (Official Confirmation)**
+The background music used in the demonstration video is fully compliant with copyright regulations:
+* **Track Name:** Love Aside
+* **Source:** YouTube Audio Library
+* **License Type:** YouTube Audio Library License (Royalty-free)
+* **Status:** Attribution not required per library terms. 
+
+---
+**"Signal synchronized. Awaiting resonance."**
